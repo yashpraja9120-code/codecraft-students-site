@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building Your First REST API with Python and Flask &mdash; CodeCraft Students</title>
+<meta name="description" content="A hands-on walkthrough of building a small, real API in Flask — routes, JSON responses, and testing it with your browser.">
+<link rel="canonical" href="https://www.codecraftstudents.example/articles/flask-rest-api.html">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CodeCraft Students">
+<meta property="og:title" content="Building Your First REST API with Python and Flask &mdash; CodeCraft Students">
+<meta property="og:description" content="A hands-on walkthrough of building a small, real API in Flask — routes, JSON responses, and testing it with your browser.">
+<meta property="og:url" content="https://www.codecraftstudents.example/articles/flask-rest-api.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Building Your First REST API with Python and Flask &mdash; CodeCraft Students">
+<meta name="twitter:description" content="A hands-on walkthrough of building a small, real API in Flask — routes, JSON responses, and testing it with your browser.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230E1729%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%236FE3D2%22 font-family=%22monospace%22 text-anchor=%22middle%22>&gt;_</text></svg>">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": 'Building Your First REST API with Python and Flask',
+  "datePublished": "2026-04-05",
+  "author": {"@type": "Organization", "name": "CodeCraft Students"},
+  "publisher": {"@type": "Organization", "name": "CodeCraft Students"},
+  "description": 'A hands-on walkthrough of building a small, real API in Flask — routes, JSON responses, and testing it with your browser.',
+  "mainEntityOfPage": "https://www.codecraftstudents.example/articles/flask-rest-api.html"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+    <nav class="main-nav" aria-label="Primary">
+        <a href="../index.html">Home</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <form class="header-search" data-header-search data-search-page="../search.html" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" placeholder="Search articles&hellip;" aria-label="Search articles">
+      </form>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="article-header">
+    <div class="container">
+      <p class="breadcrumbs"><a href="../index.html">Home</a> / <a href="../blog.html">Blog</a> / Programming</p>
+      <span class="eyebrow">Programming</span>
+      <h1>Building Your First REST API with Python and Flask</h1>
+      <p class="article-lede">A hands-on walkthrough of building a small, real API in Flask — routes, JSON responses, and testing it with your browser.</p>
+      <div class="article-meta-row">
+        <span>2026-04-05</span>
+        <span>&middot;</span>
+        <span>10 min read</span>
+        <span>&middot;</span>
+        <span>python, flask, web-dev</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body-wrap">
+      <article class="article-body">
+        
+<h2>What you'll build</h2>
+<p>A small REST API using Flask, a lightweight Python web framework, that serves a list of study tasks as JSON and lets you add new ones. By the end, you'll have a working API you can test directly in your browser or with a tool like the REST Client extension mentioned in <a href="vscode-extensions.html">10 VS Code Extensions</a>.</p>
+
+<h2>Step 1: Set up the project</h2>
+<pre><code>mkdir task-api && cd task-api
+python3 -m venv venv
+source venv/bin/activate   # on Windows: venv\Scripts\activate
+pip install flask</code></pre>
+
+<h2>Step 2: A minimal working server</h2>
+<p>Create a file called <code>app.py</code>:</p>
+<pre><code>from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return jsonify(message="Task API is running")
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre>
+<p>Run it with <code>python app.py</code> and visit <code>http://127.0.0.1:5000/</code> in your browser &mdash; you should see the JSON message. <code>debug=True</code> restarts the server automatically whenever you save a change, which is very useful while learning.</p>
+
+<h2>Step 3: Return a real resource</h2>
+<pre><code>tasks = [
+    {"id": 1, "title": "Finish Python roadmap", "done": False},
+    {"id": 2, "title": "Practice Git commands", "done": True},
+]
+
+@app.route("/tasks")
+def get_tasks():
+    return jsonify(tasks)</code></pre>
+<p>Visiting <code>/tasks</code> now returns the full list as JSON &mdash; this is the core idea of a REST API: URLs represent resources, and the response is structured data rather than an HTML page.</p>
+
+<h2>Step 4: Accept new data with POST</h2>
+<pre><code>from flask import request
+
+@app.route("/tasks", methods=["POST"])
+def add_task():
+    new_task = request.get_json()
+    new_task["id"] = len(tasks) + 1
+    tasks.append(new_task)
+    return jsonify(new_task), 201</code></pre>
+<p>This route only accepts <code>POST</code> requests, reads the incoming JSON body, assigns it an ID, and adds it to the list, returning the created task with a <code>201 Created</code> status code &mdash; the conventional response for a successful creation.</p>
+
+<h2>Step 5: Look up one task by ID</h2>
+<pre><code>@app.route("/tasks/<int:task_id>")
+def get_task(task_id):
+    for task in tasks:
+        if task["id"] == task_id:
+            return jsonify(task)
+    return jsonify(error="Task not found"), 404</code></pre>
+<p>The <code>&lt;int:task_id&gt;</code> syntax captures part of the URL as a variable, so <code>/tasks/2</code> looks up the task with ID 2. Returning a <code>404</code> status when nothing matches follows the same HTTP conventions real-world APIs rely on.</p>
+
+<div class="callout"><strong>Why this matters beyond the exercise</strong>This same pattern &mdash; routes, JSON in and out, status codes &mdash; is exactly how production APIs work, just with a database instead of a Python list and with authentication layered on top.</div>
+
+<h2>What to try next</h2>
+<p>Swap the in-memory <code>tasks</code> list for a real database (SQLite is a gentle first step), and add basic input validation so a request missing a <code>title</code> doesn't silently break the API.</p>
+
+
+        <div class="author-box">
+          <div class="author-avatar">CS</div>
+          <div>
+            <h4>CodeCraft Students Editorial Team</h4>
+            <p>Guides written and technically reviewed before publishing. Spot a mistake? <a href="../contact.html">Let us know</a>.</p>
+          </div>
+        </div>
+      </article>
+
+      <aside class="article-sidebar">
+        <div class="sidebar-block">
+          <h4>Related articles</h4>
+          <a href="python-roadmap.html">Getting Started with Python: A Student's Roadmap</a>
+<a href="variables-data-types.html">Understanding Variables and Data Types in Programming</a>
+<a href="what-is-machine-learning.html">What Is Machine Learning? A Beginner's Guide for Students</a>
+        </div>
+        <div class="sidebar-block">
+          <h4>Browse by topic</h4>
+          <a href="../blog.html?q=python">Python</a>
+          <a href="../blog.html?q=ai">Artificial Intelligence</a>
+          <a href="../blog.html?q=git">Tools &amp; Git</a>
+          <a href="../blog.html?q=data">Computer Science</a>
+        </div>
+        <div class="ad-slot">Advertisement placeholder &mdash; 300&times;250</div>
+      </aside>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+        <p>Plain-language explainers on programming, AI, and computer science, written for students building their first real projects.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <a href="../index.html">Home</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../search.html">Search</a>
+        <a href="../about.html">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <a href="../blog.html?q=python">Python</a>
+        <a href="../blog.html?q=ai">Artificial Intelligence</a>
+        <a href="../blog.html?q=git">Git &amp; Tools</a>
+        <a href="../blog.html?q=data">Data Structures</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> CodeCraft Students. All rights reserved.</span>
+      <span>Built with plain HTML, CSS &amp; JavaScript.</span>
+    </div>
+  </div>
+</footer>
+<script src="../js/articles-data.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding Variables and Data Types in Programming &mdash; CodeCraft Students</title>
+<meta name="description" content="Why variables and types trip up so many beginners, explained with plain analogies and short examples in Python and JavaScript.">
+<link rel="canonical" href="https://www.codecraftstudents.example/articles/variables-data-types.html">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CodeCraft Students">
+<meta property="og:title" content="Understanding Variables and Data Types in Programming &mdash; CodeCraft Students">
+<meta property="og:description" content="Why variables and types trip up so many beginners, explained with plain analogies and short examples in Python and JavaScript.">
+<meta property="og:url" content="https://www.codecraftstudents.example/articles/variables-data-types.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Understanding Variables and Data Types in Programming &mdash; CodeCraft Students">
+<meta name="twitter:description" content="Why variables and types trip up so many beginners, explained with plain analogies and short examples in Python and JavaScript.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230E1729%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%236FE3D2%22 font-family=%22monospace%22 text-anchor=%22middle%22>&gt;_</text></svg>">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": 'Understanding Variables and Data Types in Programming',
+  "datePublished": "2026-01-19",
+  "author": {"@type": "Organization", "name": "CodeCraft Students"},
+  "publisher": {"@type": "Organization", "name": "CodeCraft Students"},
+  "description": 'Why variables and types trip up so many beginners, explained with plain analogies and short examples in Python and JavaScript.',
+  "mainEntityOfPage": "https://www.codecraftstudents.example/articles/variables-data-types.html"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+    <nav class="main-nav" aria-label="Primary">
+        <a href="../index.html">Home</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <form class="header-search" data-header-search data-search-page="../search.html" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" placeholder="Search articles&hellip;" aria-label="Search articles">
+      </form>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="article-header">
+    <div class="container">
+      <p class="breadcrumbs"><a href="../index.html">Home</a> / <a href="../blog.html">Blog</a> / Programming</p>
+      <span class="eyebrow">Programming</span>
+      <h1>Understanding Variables and Data Types in Programming</h1>
+      <p class="article-lede">Why variables and types trip up so many beginners, explained with plain analogies and short examples in Python and JavaScript.</p>
+      <div class="article-meta-row">
+        <span>2026-01-19</span>
+        <span>&middot;</span>
+        <span>6 min read</span>
+        <span>&middot;</span>
+        <span>fundamentals, beginners</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body-wrap">
+      <article class="article-body">
+        
+<h2>What a variable actually is</h2>
+<p>A variable is a named reference to a piece of data stored in memory. The most useful mental model for a beginner isn't a "box" (the classic analogy) but a <em>label on a value</em>: writing <code>score = 10</code> doesn't put 10 inside something called <code>score</code>, it points the name <code>score</code> at the value 10.</p>
+<pre><code>score = 10
+score = "ten"  # completely legal in Python — the label just moves</code></pre>
+
+<h2>Why data types exist at all</h2>
+<p>A data type tells the program (and you) what operations make sense on a value. You can add two numbers, but adding a number to a word doesn't have an obvious meaning &mdash; so most languages either refuse to do it or define a specific rule for it. Types are how a language avoids guessing what you meant.</p>
+
+<h2>The core types you'll use constantly</h2>
+<ul>
+  <li><strong>Integers</strong> &mdash; whole numbers, like <code>7</code> or <code>-3</code>.</li>
+  <li><strong>Floats</strong> &mdash; numbers with a decimal point, like <code>3.14</code>.</li>
+  <li><strong>Strings</strong> &mdash; text, always wrapped in quotes: <code>"hello"</code>.</li>
+  <li><strong>Booleans</strong> &mdash; exactly two values, <code>True</code> or <code>False</code>.</li>
+  <li><strong>Lists / Arrays</strong> &mdash; ordered collections you can loop over.</li>
+  <li><strong>Dictionaries / Objects</strong> &mdash; key-value pairs, like a lookup table.</li>
+</ul>
+
+<h2>Static typing vs. dynamic typing</h2>
+<p>Python and JavaScript are <em>dynamically typed</em>: a variable's type is checked while the program runs, and the same name can point at a string and later a number. Languages like Java and TypeScript are <em>statically typed</em>: you declare a type up front, and the compiler rejects code that violates it before the program ever runs.</p>
+<pre><code>// JavaScript — dynamic typing
+let count = 5;
+count = "five"; // allowed, but often a bug in disguise
+
+// TypeScript — static typing
+let total: number = 5;
+total = "five"; // compiler error, caught before running</code></pre>
+<p>Dynamic typing feels faster for small scripts. Static typing catches a whole category of mistakes earlier, which matters more as a codebase grows &mdash; this is why most large production systems lean static, even in Python (via optional type hints) and JavaScript (via TypeScript).</p>
+
+<h2>Type coercion: where beginners get burned</h2>
+<p>Languages sometimes convert one type to another automatically, and the rules are not always intuitive.</p>
+<pre><code>print("3" + "4")   # "34" — string concatenation, not addition
+print(3 + 4)       # 7   — numeric addition
+print("3" + str(4)) # "34" — explicit, intentional conversion</code></pre>
+<div class="callout"><strong>Rule of thumb</strong>If a value came from user input (like <code>input()</code> in Python or a form field in JavaScript), assume it's a string until you convert it on purpose.</div>
+
+<h2>A quick type-checking habit</h2>
+<p>When something behaves unexpectedly, print the type before anything else:</p>
+<pre><code>value = input("Enter a number: ")
+print(type(value))  # <class 'str'> — a common surprise for beginners</code></pre>
+<p>This one habit resolves a large share of "my code isn't working" questions students ask early on.</p>
+
+
+        <div class="author-box">
+          <div class="author-avatar">CS</div>
+          <div>
+            <h4>CodeCraft Students Editorial Team</h4>
+            <p>Guides written and technically reviewed before publishing. Spot a mistake? <a href="../contact.html">Let us know</a>.</p>
+          </div>
+        </div>
+      </article>
+
+      <aside class="article-sidebar">
+        <div class="sidebar-block">
+          <h4>Related articles</h4>
+          <a href="python-roadmap.html">Getting Started with Python: A Student's Roadmap</a>
+<a href="what-is-machine-learning.html">What Is Machine Learning? A Beginner's Guide for Students</a>
+<a href="git-github-basics.html">Git and GitHub Basics Every Student Should Know</a>
+        </div>
+        <div class="sidebar-block">
+          <h4>Browse by topic</h4>
+          <a href="../blog.html?q=python">Python</a>
+          <a href="../blog.html?q=ai">Artificial Intelligence</a>
+          <a href="../blog.html?q=git">Tools &amp; Git</a>
+          <a href="../blog.html?q=data">Computer Science</a>
+        </div>
+        <div class="ad-slot">Advertisement placeholder &mdash; 300&times;250</div>
+      </aside>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+        <p>Plain-language explainers on programming, AI, and computer science, written for students building their first real projects.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <a href="../index.html">Home</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../search.html">Search</a>
+        <a href="../about.html">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <a href="../blog.html?q=python">Python</a>
+        <a href="../blog.html?q=ai">Artificial Intelligence</a>
+        <a href="../blog.html?q=git">Git &amp; Tools</a>
+        <a href="../blog.html?q=data">Data Structures</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> CodeCraft Students. All rights reserved.</span>
+      <span>Built with plain HTML, CSS &amp; JavaScript.</span>
+    </div>
+  </div>
+</footer>
+<script src="../js/articles-data.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

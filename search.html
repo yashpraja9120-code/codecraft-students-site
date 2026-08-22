@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search &mdash; CodeCraft Students</title>
+<meta name="description" content="Search CodeCraft Students articles on programming, AI, and computer science by keyword or topic.">
+<link rel="canonical" href="https://www.codecraftstudents.example/search.html">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CodeCraft Students">
+<meta property="og:title" content="Search &mdash; CodeCraft Students">
+<meta property="og:description" content="Search CodeCraft Students articles on programming, AI, and computer science by keyword or topic.">
+<meta property="og:url" content="https://www.codecraftstudents.example/search.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Search &mdash; CodeCraft Students">
+<meta name="twitter:description" content="Search CodeCraft Students articles on programming, AI, and computer science by keyword or topic.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230E1729%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%236FE3D2%22 font-family=%22monospace%22 text-anchor=%22middle%22>&gt;_</text></svg>">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+    <nav class="main-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <form class="header-search" data-header-search data-search-page="search.html" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" placeholder="Search articles&hellip;" aria-label="Search articles">
+      </form>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="search-hero">
+    <div class="container">
+      <span class="eyebrow">find something fast</span>
+      <h1>Search articles</h1>
+      <p class="hero-sub">Search titles, topics, and tags across the whole site.</p>
+      <div class="search-box" style="max-width:560px; margin-top:20px;">
+        <input type="search" data-search-input placeholder="Try &quot;python&quot;, &quot;neural networks&quot;, &quot;git&quot;&hellip;" aria-label="Search articles">
+      </div>
+      <p class="search-meta" data-search-meta>Start typing to search every article by title, topic, or tag.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="article-grid" data-search-results></div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+        <p>Plain-language explainers on programming, AI, and computer science, written for students building their first real projects.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <a href="index.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="search.html">Search</a>
+        <a href="about.html">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <a href="blog.html?q=python">Python</a>
+        <a href="blog.html?q=ai">Artificial Intelligence</a>
+        <a href="blog.html?q=git">Git &amp; Tools</a>
+        <a href="blog.html?q=data">Data Structures</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> CodeCraft Students. All rights reserved.</span>
+      <span>Built with plain HTML, CSS &amp; JavaScript.</span>
+    </div>
+  </div>
+</footer>
+<script src="js/articles-data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

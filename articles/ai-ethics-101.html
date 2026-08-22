@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Ethics 101: What Every Programmer Should Understand &mdash; CodeCraft Students</title>
+<meta name="description" content="Bias, consent, and accountability aren't someone else's problem — a grounded introduction for students who will build these systems.">
+<link rel="canonical" href="https://www.codecraftstudents.example/articles/ai-ethics-101.html">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CodeCraft Students">
+<meta property="og:title" content="AI Ethics 101: What Every Programmer Should Understand &mdash; CodeCraft Students">
+<meta property="og:description" content="Bias, consent, and accountability aren't someone else's problem — a grounded introduction for students who will build these systems.">
+<meta property="og:url" content="https://www.codecraftstudents.example/articles/ai-ethics-101.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AI Ethics 101: What Every Programmer Should Understand &mdash; CodeCraft Students">
+<meta name="twitter:description" content="Bias, consent, and accountability aren't someone else's problem — a grounded introduction for students who will build these systems.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230E1729%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%236FE3D2%22 font-family=%22monospace%22 text-anchor=%22middle%22>&gt;_</text></svg>">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": 'AI Ethics 101: What Every Programmer Should Understand',
+  "datePublished": "2026-05-02",
+  "author": {"@type": "Organization", "name": "CodeCraft Students"},
+  "publisher": {"@type": "Organization", "name": "CodeCraft Students"},
+  "description": "Bias, consent, and accountability aren't someone else's problem — a grounded introduction for students who will build these systems.",
+  "mainEntityOfPage": "https://www.codecraftstudents.example/articles/ai-ethics-101.html"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+    <nav class="main-nav" aria-label="Primary">
+        <a href="../index.html">Home</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <form class="header-search" data-header-search data-search-page="../search.html" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" placeholder="Search articles&hellip;" aria-label="Search articles">
+      </form>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="article-header">
+    <div class="container">
+      <p class="breadcrumbs"><a href="../index.html">Home</a> / <a href="../blog.html">Blog</a> / AI</p>
+      <span class="eyebrow">AI</span>
+      <h1>AI Ethics 101: What Every Programmer Should Understand</h1>
+      <p class="article-lede">Bias, consent, and accountability aren't someone else's problem — a grounded introduction for students who will build these systems.</p>
+      <div class="article-meta-row">
+        <span>2026-05-02</span>
+        <span>&middot;</span>
+        <span>8 min read</span>
+        <span>&middot;</span>
+        <span>ai, ethics</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body-wrap">
+      <article class="article-body">
+        
+<h2>Why this belongs in a programming curriculum</h2>
+<p>Ethics in AI is often treated as a separate, optional topic from the technical material &mdash; something for a philosophy elective, not the coding class. That separation doesn't hold up once you're the person actually writing the code that decides, say, which loan applications get flagged for review. The technical choices you make are the ethical choices, whether or not you label them that way.</p>
+
+<h2>Bias: where it actually comes from</h2>
+<p>A model trained on historical data will reproduce the patterns in that data, including unfair ones. If a hiring dataset reflects decades of a workforce skewed toward one demographic, a model trained on it can learn to favor that demographic &mdash; not because anyone told it to, but because that's the pattern in the data it was shown.</p>
+<div class="callout"><strong>Key point</strong>Bias in AI is usually a data problem and a deployment-context problem, not a single "bad line of code" problem. That's exactly what makes it hard to catch and easy to overlook.</div>
+
+<h2>Consent and data collection</h2>
+<p>Training data often comes from people who never explicitly agreed to have their information used that way &mdash; photos scraped from the web, text from forums, behavior tracked across sites. As a programmer, questions worth asking before you collect or reuse data include: did the people this data describes have a reasonable expectation of how it would be used, and would they be comfortable knowing it trained a model?</p>
+
+<h2>Accountability: who answers for a mistake</h2>
+<p>When a traditional program produces a wrong output, you can usually trace it to a specific line of logic. When a machine learning model produces a wrong or harmful output, that traceability is much weaker &mdash; which makes it tempting to treat the model's decision as unquestionable simply because a human can't easily explain it. Systems that materially affect people (loan approvals, medical triage, hiring) generally need a human review step and a clear path for someone to challenge a decision.</p>
+
+<h2>Transparency: what users are entitled to know</h2>
+<p>A reasonable minimum, even for a student project, is being upfront about three things: that AI is involved at all, what data informed its decisions, and what its known limitations are. This is also increasingly a legal requirement in many regions, not just good practice.</p>
+
+<h2>A practical checklist for student projects</h2>
+<ul>
+  <li>Where did your training data come from, and did those people consent to that use?</li>
+  <li>Does your dataset represent the population your model will actually be used on?</li>
+  <li>What happens when the model is wrong &mdash; who notices, and what's the fallback?</li>
+  <li>Would you be comfortable explaining exactly how the model reached a decision to someone it affected?</li>
+</ul>
+
+<p>None of this means avoiding AI projects &mdash; it means building the habit of asking these questions early, while a project is still small and easy to change, rather than after it's deployed and affecting real people.</p>
+
+
+        <div class="author-box">
+          <div class="author-avatar">CS</div>
+          <div>
+            <h4>CodeCraft Students Editorial Team</h4>
+            <p>Guides written and technically reviewed before publishing. Spot a mistake? <a href="../contact.html">Let us know</a>.</p>
+          </div>
+        </div>
+      </article>
+
+      <aside class="article-sidebar">
+        <div class="sidebar-block">
+          <h4>Related articles</h4>
+          <a href="python-roadmap.html">Getting Started with Python: A Student's Roadmap</a>
+<a href="variables-data-types.html">Understanding Variables and Data Types in Programming</a>
+<a href="what-is-machine-learning.html">What Is Machine Learning? A Beginner's Guide for Students</a>
+        </div>
+        <div class="sidebar-block">
+          <h4>Browse by topic</h4>
+          <a href="../blog.html?q=python">Python</a>
+          <a href="../blog.html?q=ai">Artificial Intelligence</a>
+          <a href="../blog.html?q=git">Tools &amp; Git</a>
+          <a href="../blog.html?q=data">Computer Science</a>
+        </div>
+        <div class="ad-slot">Advertisement placeholder &mdash; 300&times;250</div>
+      </aside>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+        <p>Plain-language explainers on programming, AI, and computer science, written for students building their first real projects.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <a href="../index.html">Home</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../search.html">Search</a>
+        <a href="../about.html">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <a href="../blog.html?q=python">Python</a>
+        <a href="../blog.html?q=ai">Artificial Intelligence</a>
+        <a href="../blog.html?q=git">Git &amp; Tools</a>
+        <a href="../blog.html?q=data">Data Structures</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> CodeCraft Students. All rights reserved.</span>
+      <span>Built with plain HTML, CSS &amp; JavaScript.</span>
+    </div>
+  </div>
+</footer>
+<script src="../js/articles-data.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

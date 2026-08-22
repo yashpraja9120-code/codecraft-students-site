@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Structures Every CS Student Must Master &mdash; CodeCraft Students</title>
+<meta name="description" content="Arrays, linked lists, stacks, queues, trees, and hash maps — what each one is actually good for, not just how to implement it.">
+<link rel="canonical" href="https://www.codecraftstudents.example/articles/data-structures-guide.html">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CodeCraft Students">
+<meta property="og:title" content="Data Structures Every CS Student Must Master &mdash; CodeCraft Students">
+<meta property="og:description" content="Arrays, linked lists, stacks, queues, trees, and hash maps — what each one is actually good for, not just how to implement it.">
+<meta property="og:url" content="https://www.codecraftstudents.example/articles/data-structures-guide.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Structures Every CS Student Must Master &mdash; CodeCraft Students">
+<meta name="twitter:description" content="Arrays, linked lists, stacks, queues, trees, and hash maps — what each one is actually good for, not just how to implement it.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230E1729%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%236FE3D2%22 font-family=%22monospace%22 text-anchor=%22middle%22>&gt;_</text></svg>">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": 'Data Structures Every CS Student Must Master',
+  "datePublished": "2026-03-22",
+  "author": {"@type": "Organization", "name": "CodeCraft Students"},
+  "publisher": {"@type": "Organization", "name": "CodeCraft Students"},
+  "description": 'Arrays, linked lists, stacks, queues, trees, and hash maps — what each one is actually good for, not just how to implement it.',
+  "mainEntityOfPage": "https://www.codecraftstudents.example/articles/data-structures-guide.html"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+    <nav class="main-nav" aria-label="Primary">
+        <a href="../index.html">Home</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <form class="header-search" data-header-search data-search-page="../search.html" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" placeholder="Search articles&hellip;" aria-label="Search articles">
+      </form>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="article-header">
+    <div class="container">
+      <p class="breadcrumbs"><a href="../index.html">Home</a> / <a href="../blog.html">Blog</a> / Computer Science</p>
+      <span class="eyebrow">Computer Science</span>
+      <h1>Data Structures Every CS Student Must Master</h1>
+      <p class="article-lede">Arrays, linked lists, stacks, queues, trees, and hash maps — what each one is actually good for, not just how to implement it.</p>
+      <div class="article-meta-row">
+        <span>2026-03-22</span>
+        <span>&middot;</span>
+        <span>9 min read</span>
+        <span>&middot;</span>
+        <span>data-structures, cs-fundamentals</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body-wrap">
+      <article class="article-body">
+        
+<h2>Why data structures are worth the effort</h2>
+<p>A data structure is just a way of organizing data so certain operations &mdash; searching, inserting, deleting &mdash; are fast. Picking the wrong one doesn't usually break a program; it just makes it slow in a way that only shows up once the data gets large, which is exactly why understanding the trade-offs matters.</p>
+
+<h2>Arrays</h2>
+<p>An array stores elements in contiguous memory, accessed by index. Reading any element by its position is extremely fast, but inserting or removing an element in the middle requires shifting everything after it.</p>
+<pre><code>scores = [88, 92, 75, 60]
+print(scores[2])  # 75 — instant lookup by index</code></pre>
+<p><strong>Good for:</strong> fixed-size or rarely-changing collections you access by position, like a list of monthly totals.</p>
+
+<h2>Linked lists</h2>
+<p>Instead of contiguous memory, each element ("node") stores its value plus a pointer to the next node. Inserting or removing at the front is fast, since nothing needs to shift, but finding an element by position requires walking through the list from the start.</p>
+<p><strong>Good for:</strong> situations with frequent insertions/removals at the ends, like a browser's history "back" list.</p>
+
+<h2>Stacks</h2>
+<p>A stack follows Last In, First Out (LIFO): the most recently added item is the first one removed. Think of a stack of plates &mdash; you take from the top.</p>
+<pre><code>stack = []
+stack.append("a")
+stack.append("b")
+stack.pop()  # removes and returns "b"</code></pre>
+<p><strong>Good for:</strong> undo functionality, function call tracking, and parsing matched brackets.</p>
+
+<h2>Queues</h2>
+<p>A queue follows First In, First Out (FIFO): the first item added is the first one removed &mdash; like a line at a store.</p>
+<pre><code>from collections import deque
+queue = deque()
+queue.append("first")
+queue.append("second")
+queue.popleft()  # removes and returns "first"</code></pre>
+<p><strong>Good for:</strong> task scheduling, print job queues, and breadth-first search in graphs.</p>
+
+<h2>Trees</h2>
+<p>A tree is a hierarchical structure where each node has one parent (except the root) and any number of children. A binary search tree keeps values ordered so that, on average, searching, inserting, and deleting are all much faster than in an unsorted list.</p>
+<p><strong>Good for:</strong> hierarchical data (file systems, org charts) and fast ordered lookups.</p>
+
+<h2>Hash maps (dictionaries)</h2>
+<p>A hash map stores key-value pairs and uses a hashing function to compute where each key's value should live, making lookups by key extremely fast on average &mdash; close to instant regardless of how many items are stored.</p>
+<pre><code>student_grades = {"Amy": 91, "Raj": 84, "Noor": 78}
+print(student_grades["Raj"])  # 84 — fast lookup by key, not position</code></pre>
+<p><strong>Good for:</strong> anything you look up by a unique identifier, like usernames, IDs, or word counts.</p>
+
+<div class="callout"><strong>How to actually choose</strong>Ask what operation your code does most: look up by position (array), add/remove from the ends (linked list/queue), undo the last action (stack), keep things ordered and searchable (tree), or look up by a unique key (hash map). Picking based on the most frequent operation is usually enough to make a solid choice.</div>
+
+
+        <div class="author-box">
+          <div class="author-avatar">CS</div>
+          <div>
+            <h4>CodeCraft Students Editorial Team</h4>
+            <p>Guides written and technically reviewed before publishing. Spot a mistake? <a href="../contact.html">Let us know</a>.</p>
+          </div>
+        </div>
+      </article>
+
+      <aside class="article-sidebar">
+        <div class="sidebar-block">
+          <h4>Related articles</h4>
+          <a href="python-roadmap.html">Getting Started with Python: A Student's Roadmap</a>
+<a href="variables-data-types.html">Understanding Variables and Data Types in Programming</a>
+<a href="what-is-machine-learning.html">What Is Machine Learning? A Beginner's Guide for Students</a>
+        </div>
+        <div class="sidebar-block">
+          <h4>Browse by topic</h4>
+          <a href="../blog.html?q=python">Python</a>
+          <a href="../blog.html?q=ai">Artificial Intelligence</a>
+          <a href="../blog.html?q=git">Tools &amp; Git</a>
+          <a href="../blog.html?q=data">Computer Science</a>
+        </div>
+        <div class="ad-slot">Advertisement placeholder &mdash; 300&times;250</div>
+      </aside>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+        <p>Plain-language explainers on programming, AI, and computer science, written for students building their first real projects.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <a href="../index.html">Home</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../search.html">Search</a>
+        <a href="../about.html">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <a href="../blog.html?q=python">Python</a>
+        <a href="../blog.html?q=ai">Artificial Intelligence</a>
+        <a href="../blog.html?q=git">Git &amp; Tools</a>
+        <a href="../blog.html?q=data">Data Structures</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> CodeCraft Students. All rights reserved.</span>
+      <span>Built with plain HTML, CSS &amp; JavaScript.</span>
+    </div>
+  </div>
+</footer>
+<script src="../js/articles-data.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git and GitHub Basics Every Student Should Know &mdash; CodeCraft Students</title>
+<meta name="description" content="The handful of Git commands that cover 95% of real student work, plus a mental model for what's actually happening under the hood.">
+<link rel="canonical" href="https://www.codecraftstudents.example/articles/git-github-basics.html">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CodeCraft Students">
+<meta property="og:title" content="Git and GitHub Basics Every Student Should Know &mdash; CodeCraft Students">
+<meta property="og:description" content="The handful of Git commands that cover 95% of real student work, plus a mental model for what's actually happening under the hood.">
+<meta property="og:url" content="https://www.codecraftstudents.example/articles/git-github-basics.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git and GitHub Basics Every Student Should Know &mdash; CodeCraft Students">
+<meta name="twitter:description" content="The handful of Git commands that cover 95% of real student work, plus a mental model for what's actually happening under the hood.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230E1729%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 fill=%22%236FE3D2%22 font-family=%22monospace%22 text-anchor=%22middle%22>&gt;_</text></svg>">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": 'Git and GitHub Basics Every Student Should Know',
+  "datePublished": "2026-02-14",
+  "author": {"@type": "Organization", "name": "CodeCraft Students"},
+  "publisher": {"@type": "Organization", "name": "CodeCraft Students"},
+  "description": "The handful of Git commands that cover 95% of real student work, plus a mental model for what's actually happening under the hood.",
+  "mainEntityOfPage": "https://www.codecraftstudents.example/articles/git-github-basics.html"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+    <nav class="main-nav" aria-label="Primary">
+        <a href="../index.html">Home</a>
+        <a href="../blog.html" aria-current="page">Blog</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <form class="header-search" data-header-search data-search-page="../search.html" role="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" placeholder="Search articles&hellip;" aria-label="Search articles">
+      </form>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="article-header">
+    <div class="container">
+      <p class="breadcrumbs"><a href="../index.html">Home</a> / <a href="../blog.html">Blog</a> / Tools</p>
+      <span class="eyebrow">Tools</span>
+      <h1>Git and GitHub Basics Every Student Should Know</h1>
+      <p class="article-lede">The handful of Git commands that cover 95% of real student work, plus a mental model for what's actually happening under the hood.</p>
+      <div class="article-meta-row">
+        <span>2026-02-14</span>
+        <span>&middot;</span>
+        <span>7 min read</span>
+        <span>&middot;</span>
+        <span>git, tools</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container article-body-wrap">
+      <article class="article-body">
+        
+<h2>What Git actually is</h2>
+<p>Git is a version control system: it keeps a history of every saved change to your project, so you can go back to an earlier version, see exactly what changed and when, and work on features without risking your main, working code. GitHub is a separate thing &mdash; a website that hosts Git repositories online so you can back them up and collaborate with others.</p>
+
+<h2>The mental model that makes Git click</h2>
+<p>Git tracks snapshots, not files. Every time you "commit," Git saves a snapshot of your entire project at that moment and gives it a unique ID. Your project's history is just a chain of these snapshots, and most Git commands are really about moving between them or combining them.</p>
+
+<h2>The commands that cover almost everything</h2>
+<pre><code># One-time setup for a new project
+git init
+
+# Check what's changed
+git status
+
+# Stage specific changes for the next commit
+git add filename.py
+git add .            # stage everything changed
+
+# Save a snapshot with a message
+git commit -m "Add temperature converter function"
+
+# See the project history
+git log --oneline
+
+# Connect to a GitHub repository and push your history
+git remote add origin https://github.com/username/repo.git
+git push -u origin main
+
+# Get someone else's latest changes
+git pull</code></pre>
+
+<h2>Branches, without the confusion</h2>
+<p>A branch is just an independent line of history. The default branch (usually <code>main</code>) holds your stable code; creating a new branch lets you experiment or build a feature without touching it.</p>
+<pre><code>git branch feature-login       # create a branch
+git checkout feature-login     # switch to it
+git checkout -b feature-login  # do both in one step
+
+# once the feature works, merge it back
+git checkout main
+git merge feature-login</code></pre>
+
+<h2>A workflow you can actually follow</h2>
+<ol>
+  <li>Pull the latest changes before you start working: <code>git pull</code>.</li>
+  <li>Create a branch for whatever you're about to build.</li>
+  <li>Commit small, focused changes with clear messages as you go &mdash; not one giant commit at the end.</li>
+  <li>Push the branch and open a pull request on GitHub if you're working with others.</li>
+  <li>Merge once it's reviewed (or once you're satisfied, if it's a solo project).</li>
+</ol>
+
+<div class="callout"><strong>Common trap</strong>A vague commit message like "fixed stuff" is useless six weeks later. Write commit messages that describe <em>what changed and why</em>, as if explaining it to a teammate who wasn't there.</div>
+
+<h2>When something goes wrong</h2>
+<p><code>git status</code> is your first move in almost every confusing situation &mdash; it tells you exactly what state your files are in relative to your last commit. From there, <code>git log</code> shows you the history, and <code>git diff</code> shows exactly what changed, line by line, before you commit it.</p>
+
+
+        <div class="author-box">
+          <div class="author-avatar">CS</div>
+          <div>
+            <h4>CodeCraft Students Editorial Team</h4>
+            <p>Guides written and technically reviewed before publishing. Spot a mistake? <a href="../contact.html">Let us know</a>.</p>
+          </div>
+        </div>
+      </article>
+
+      <aside class="article-sidebar">
+        <div class="sidebar-block">
+          <h4>Related articles</h4>
+          <a href="python-roadmap.html">Getting Started with Python: A Student's Roadmap</a>
+<a href="variables-data-types.html">Understanding Variables and Data Types in Programming</a>
+<a href="what-is-machine-learning.html">What Is Machine Learning? A Beginner's Guide for Students</a>
+        </div>
+        <div class="sidebar-block">
+          <h4>Browse by topic</h4>
+          <a href="../blog.html?q=python">Python</a>
+          <a href="../blog.html?q=ai">Artificial Intelligence</a>
+          <a href="../blog.html?q=git">Tools &amp; Git</a>
+          <a href="../blog.html?q=data">Computer Science</a>
+        </div>
+        <div class="ad-slot">Advertisement placeholder &mdash; 300&times;250</div>
+      </aside>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="../index.html" class="logo"><span class="logo-mark">&gt;_</span> CodeCraft Students</a>
+        <p>Plain-language explainers on programming, AI, and computer science, written for students building their first real projects.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <a href="../index.html">Home</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../search.html">Search</a>
+        <a href="../about.html">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <a href="../blog.html?q=python">Python</a>
+        <a href="../blog.html?q=ai">Artificial Intelligence</a>
+        <a href="../blog.html?q=git">Git &amp; Tools</a>
+        <a href="../blog.html?q=data">Data Structures</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy-policy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> CodeCraft Students. All rights reserved.</span>
+      <span>Built with plain HTML, CSS &amp; JavaScript.</span>
+    </div>
+  </div>
+</footer>
+<script src="../js/articles-data.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

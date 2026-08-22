@@ -1,0 +1,183 @@
+/**
+ * CodeCraft Students — shared site behaviour.
+ * No frameworks, no build step: plain DOM APIs so the site stays
+ * fast and easy to host anywhere (including free static hosts).
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  initNavToggle();
+  initFooterYear();
+  initHeaderSearchForm();
+  initBlogListing();
+  initSearchPage();
+  initContactForm();
+});
+
+/* ---------- Mobile nav ---------- */
+function initNavToggle() {
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector(".main-nav");
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+/* ---------- Footer year ---------- */
+function initFooterYear() {
+  document.querySelectorAll("[data-year]").forEach((el) => {
+    el.textContent = new Date().getFullYear();
+  });
+}
+
+/* ---------- Header search box: redirects to search.html?q= ---------- */
+function initHeaderSearchForm() {
+  const form = document.querySelector("[data-header-search]");
+  if (!form) return;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = form.querySelector("input").value.trim();
+    const base = form.getAttribute("data-search-page") || "search.html";
+    window.location.href = q ? `${base}?q=${encodeURIComponent(q)}` : base;
+  });
+}
+
+/* ---------- Helpers ---------- */
+function formatDate(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function articleCardHTML(article) {
+  return `
+    <article class="article-card">
+      <div class="tag-row">
+        <span class="tag-pill">${article.category}</span>
+      </div>
+      <h3><a href="${article.slug}">${article.title}</a></h3>
+      <p>${article.excerpt}</p>
+      <div class="card-meta">
+        <span>${formatDate(article.date)}</span>
+        <span>&middot;</span>
+        <span>${article.readTime}</span>
+      </div>
+      <a class="read-link" href="${article.slug}">Read article &rarr;</a>
+    </article>`;
+}
+
+/* ---------- Blog listing page (with light client-side filter) ---------- */
+function initBlogListing() {
+  const grid = document.querySelector("[data-blog-grid]");
+  if (!grid || typeof ARTICLES === "undefined") return;
+
+  const params = new URLSearchParams(window.location.search);
+  const initialQuery = params.get("q") || "";
+  const filterInput = document.querySelector("[data-blog-filter]");
+  const categoryButtons = document.querySelectorAll("[data-category-filter]");
+  let activeCategory = "All";
+
+  function render() {
+    const query = (filterInput ? filterInput.value : "").trim().toLowerCase();
+    const filtered = ARTICLES.filter((a) => {
+      const matchesCategory = activeCategory === "All" || a.category === activeCategory;
+      const haystack = `${a.title} ${a.excerpt} ${a.tags.join(" ")}`.toLowerCase();
+      const matchesQuery = query === "" || haystack.includes(query);
+      return matchesCategory && matchesQuery;
+    });
+
+    grid.innerHTML = filtered.map(articleCardHTML).join("") ||
+      `<p class="no-results visible">No articles match that search yet. Try a different keyword.</p>`;
+
+    const countEl = document.querySelector("[data-result-count]");
+    if (countEl) countEl.textContent = `${filtered.length} article${filtered.length === 1 ? "" : "s"}`;
+  }
+
+  if (filterInput) {
+    filterInput.value = initialQuery;
+    filterInput.addEventListener("input", render);
+  }
+
+  categoryButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      categoryButtons.forEach((b) => b.classList.remove("btn-primary"));
+      categoryButtons.forEach((b) => b.classList.add("btn-outline"));
+      btn.classList.remove("btn-outline");
+      btn.classList.add("btn-primary");
+      activeCategory = btn.dataset.categoryFilter;
+      render();
+    });
+  });
+
+  render();
+}
+
+/* ---------- Dedicated /search.html page ---------- */
+function initSearchPage() {
+  const resultsEl = document.querySelector("[data-search-results]");
+  if (!resultsEl || typeof ARTICLES === "undefined") return;
+
+  const input = document.querySelector("[data-search-input]");
+  const params = new URLSearchParams(window.location.search);
+  const initialQuery = params.get("q") || "";
+  if (input) input.value = initialQuery;
+
+  function render() {
+    const query = (input ? input.value : "").trim().toLowerCase();
+    const metaEl = document.querySelector("[data-search-meta]");
+
+    if (query === "") {
+      resultsEl.innerHTML = "";
+      if (metaEl) metaEl.textContent = "Start typing to search every article by title, topic, or tag.";
+      return;
+    }
+
+    const filtered = ARTICLES.filter((a) => {
+      const haystack = `${a.title} ${a.excerpt} ${a.tags.join(" ")} ${a.category}`.toLowerCase();
+      return haystack.includes(query);
+    });
+
+    if (metaEl) {
+      metaEl.textContent = `${filtered.length} result${filtered.length === 1 ? "" : "s"} for "${query}"`;
+    }
+
+    resultsEl.innerHTML = filtered.map(articleCardHTML).join("") ||
+      `<p class="no-results visible">Nothing matched "${query}". Try a broader term like "python" or "ai".</p>`;
+  }
+
+  if (input) {
+    input.addEventListener("input", render);
+    input.focus();
+  }
+  render();
+}
+
+/* ---------- Contact form (front-end only demo handling) ---------- */
+function initContactForm() {
+  const form = document.querySelector("[data-contact-form]");
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const successEl = document.querySelector("[data-contact-success]");
+    if (successEl) {
+      successEl.classList.add("visible");
+      successEl.setAttribute("role", "status");
+    }
+    form.reset();
+    /*
+      This demo stores nothing and sends nothing — it only shows a
+      confirmation message. To actually receive messages, connect this
+      form to a form backend (Formspree, Netlify Forms, your own
+      server endpoint, etc.) and post the fields there instead.
+    */
+  });
+}
