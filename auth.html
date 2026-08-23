@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YashTech - Sign In / Sign Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f5f7fb;
+        }
+
+        .container {
+            width: 400px;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+        }
+
+        .tabs button {
+            width: 50%;
+            padding: 12px;
+            border: none;
+            background: #eee;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tabs button.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>YashTech</h1>
+
+    <div class="tabs">
+        <button id="loginTab" class="active" onclick="showLogin()">
+            Sign In
+        </button>
+
+        <button id="signupTab" onclick="showSignup()">
+            Sign Up
+        </button>
+    </div>
+
+    <!-- LOGIN -->
+    <form id="loginForm" class="form active">
+
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email"
+            required
+        >
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+        >
+
+        <button type="submit" class="submit-btn">
+            Sign In
+        </button>
+
+    </form>
+
+
+    <!-- SIGN UP -->
+    <form id="signupForm" class="form">
+
+        <input
+            type="text"
+            id="signupName"
+            placeholder="Full Name"
+            required
+        >
+
+        <input
+            type="email"
+            id="signupEmail"
+            placeholder="Email"
+            required
+        >
+
+        <input
+            type="password"
+            id="signupPassword"
+            placeholder="Password"
+            required
+        >
+
+        <button type="submit" class="submit-btn">
+            Create Account
+        </button>
+
+    </form>
+
+    <div id="message"></div>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://127.0.0.1:5000";
+
+
+// SWITCH TO LOGIN
+function showLogin() {
+
+    document.getElementById("loginForm").classList.add("active");
+    document.getElementById("signupForm").classList.remove("active");
+
+    document.getElementById("loginTab").classList.add("active");
+    document.getElementById("signupTab").classList.remove("active");
+
+    document.getElementById("message").textContent = "";
+}
+
+
+// SWITCH TO SIGNUP
+function showSignup() {
+
+    document.getElementById("signupForm").classList.add("active");
+    document.getElementById("loginForm").classList.remove("active");
+
+    document.getElementById("signupTab").classList.add("active");
+    document.getElementById("loginTab").classList.remove("active");
+
+    document.getElementById("message").textContent = "";
+}
+
+
+// SIGNUP
+document.getElementById("signupForm").addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const name = document.getElementById("signupName").value;
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+
+    try {
+
+        const response = await fetch(`${API_URL}/api/signup`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password
+            })
+
+        });
+
+        const data = await response.json();
+
+        document.getElementById("message").textContent = data.message;
+
+        if (response.ok) {
+
+            document.getElementById("signupForm").reset();
+
+            setTimeout(() => {
+                showLogin();
+            }, 1000);
+
+        }
+
+    } catch (error) {
+
+        document.getElementById("message").textContent =
+            "Unable to connect to server.";
+
+    }
+
+});
+
+
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+
+        const response = await fetch(`${API_URL}/api/login`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+
+        });
+
+        const data = await response.json();
+
+        document.getElementById("message").textContent = data.message;
+
+        if (response.ok) {
+
+            console.log("Logged in user:", data.user);
+
+            // Later we can redirect the user
+            // window.location.href = "index.html";
+
+        }
+
+    } catch (error) {
+
+        document.getElementById("message").textContent =
+            "Unable to connect to server.";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
