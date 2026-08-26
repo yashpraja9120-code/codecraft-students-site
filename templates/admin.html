@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>YashTech Analytics Dashboard</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <a href="index.html" class="logo">
+        <span class="logo-mark">&gt;_</span>
+        YashTech
+      </a>
+
+      <nav class="main-nav">
+        <a href="index.html">Website</a>
+        <a href="admin.html" aria-current="page">
+          Dashboard
+        </a>
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <main id="main">
+
+    <section class="section">
+
+      <div class="container">
+
+        <span class="eyebrow">
+          website analytics
+        </span>
+
+        <h1>
+          YashTech Dashboard
+        </h1>
+
+        <p>
+          Monitor visitors and feedback from your website.
+        </p>
+
+
+        <div class="feature-grid">
+
+          <div class="feature-card">
+            <div class="feature-icon">01</div>
+            <h3 id="total-visits">0</h3>
+            <p>Total Visits</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">02</div>
+            <h3 id="unique-visitors">0</h3>
+            <p>Unique Visitors</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">03</div>
+            <h3 id="today-visits">0</h3>
+            <p>Today's Visits</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">04</div>
+            <h3 id="total-feedback">0</h3>
+            <p>Total Feedback</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">05</div>
+            <h3 id="average-rating">0 ⭐</h3>
+            <p>Average Rating</p>
+          </div>
+
+        </div>
+
+
+        <section class="section">
+
+          <h2>
+            Recent Feedback
+          </h2>
+
+          <div id="feedback-list">
+            Loading feedback...
+          </div>
+
+        </section>
+
+
+        <section class="section">
+
+          <h2>
+            Last 7 Days
+          </h2>
+
+          <div id="daily-visits">
+            Loading visitor data...
+          </div>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    async function loadAnalytics() {
+
+      try {
+
+        const response = await fetch(
+          "http://127.0.0.1:5000/api/analytics"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to load analytics");
+        }
+
+        const data = await response.json();
+
+
+        document.getElementById(
+          "total-visits"
+        ).textContent = data.total_visits;
+
+
+        document.getElementById(
+          "unique-visitors"
+        ).textContent = data.unique_visitors;
+
+
+        document.getElementById(
+          "today-visits"
+        ).textContent = data.today_visits;
+
+
+        document.getElementById(
+          "total-feedback"
+        ).textContent = data.total_feedback;
+
+
+        document.getElementById(
+          "average-rating"
+        ).textContent =
+          data.average_rating + " ⭐";
+
+
+        const feedbackList =
+          document.getElementById("feedback-list");
+
+
+        if (data.recent_feedback.length === 0) {
+
+          feedbackList.innerHTML =
+            "<p>No feedback yet.</p>";
+
+        } else {
+
+          feedbackList.innerHTML =
+            data.recent_feedback.map(feedback => {
+
+              return `
+                <div class="feature-card">
+
+                  <h3>
+                    ${"⭐".repeat(feedback.rating)}
+                  </h3>
+
+                  <p>
+                    ${feedback.message || "No message provided"}
+                  </p>
+
+                  <small>
+                    ${feedback.created_at}
+                  </small>
+
+                </div>
+              `;
+
+            }).join("");
+
+        }
+
+
+        const dailyVisits =
+          document.getElementById("daily-visits");
+
+
+        if (data.daily_visits.length === 0) {
+
+          dailyVisits.innerHTML =
+            "<p>No visitor data yet.</p>";
+
+        } else {
+
+          dailyVisits.innerHTML =
+            data.daily_visits.map(day => {
+
+              return `
+                <div class="feature-card">
+
+                  <h3>${day.date}</h3>
+
+                  <p>
+                    ${day.visits} visits
+                  </p>
+
+                </div>
+              `;
+
+            }).join("");
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+          "feedback-list"
+        ).textContent =
+          "Could not load analytics.";
+
+      }
+
+    }
+
+
+    loadAnalytics();
+
+  </script>
+
+</body>
+
+</html>

@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initBlogListing();
   initSearchPage();
   initContactForm();
+  initFeedback();
+  initVisitorTracking();
 });
 
 /* ---------- Mobile nav ---------- */
@@ -180,4 +182,180 @@ function initContactForm() {
       server endpoint, etc.) and post the fields there instead.
     */
   });
+}
+
+/* ---------- Feedback system ---------- */
+function initFeedback() {
+  const openButtons = document.querySelectorAll("[data-feedback-open]");
+  if (!openButtons.length) return;
+
+  let modal = document.querySelector("[data-feedback-modal]");
+
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.className = "feedback-modal";
+    modal.setAttribute("data-feedback-modal", "");
+    modal.setAttribute("aria-hidden", "true");
+
+    modal.innerHTML = `
+      <div class="feedback-overlay" data-feedback-close></div>
+
+      <div class="feedback-box" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
+        <button class="feedback-close" type="button" data-feedback-close aria-label="Close feedback">
+          &times;
+        </button>
+
+        <span class="eyebrow">your feedback</span>
+        <h2 id="feedback-title">How was your experience?</h2>
+        <p class="feedback-subtitle">A quick rating helps us improve the website.</p>
+
+        <div class="feedback-stars" role="radiogroup" aria-label="Rating">
+          <button type="button" data-rating="1" aria-label="1 star">★</button>
+          <button type="button" data-rating="2" aria-label="2 stars">★</button>
+          <button type="button" data-rating="3" aria-label="3 stars">★</button>
+          <button type="button" data-rating="4" aria-label="4 stars">★</button>
+          <button type="button" data-rating="5" aria-label="5 stars">★</button>
+        </div>
+
+        <textarea
+          class="feedback-message"
+          placeholder="Tell us more (optional)"
+          maxlength="1000"
+          aria-label="Optional feedback"
+        ></textarea>
+
+        <button class="btn btn-primary btn-block" type="button" data-feedback-submit>
+          Submit Feedback
+        </button>
+
+        <p class="feedback-status" data-feedback-status role="status"></p>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+  }
+
+  let selectedRating = 0;
+
+  const stars = modal.querySelectorAll("[data-rating]");
+  const messageInput = modal.querySelector(".feedback-message");
+  const submitButton = modal.querySelector("[data-feedback-submit]");
+  const status = modal.querySelector("[data-feedback-status]");
+
+  function openModal() {
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    selectedRating = 0;
+    stars.forEach((star) => star.classList.remove("selected"));
+    messageInput.value = "";
+    status.textContent = "";
+  }
+
+  function closeModal() {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  openButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  });
+
+  modal.querySelectorAll("[data-feedback-close]").forEach((button) => {
+    button.addEventListener("click", closeModal);
+  });
+
+  stars.forEach((star) => {
+    star.addEventListener("click", () => {
+      selectedRating = Number(star.dataset.rating);
+
+      stars.forEach((item) => {
+        item.classList.toggle(
+          "selected",
+          Number(item.dataset.rating) <= selectedRating
+        );
+      });
+    });
+  });
+
+  submitButton.addEventListener("click", async () => {
+    if (!selectedRating) {
+      status.textContent = "Please select a star rating.";
+      return;
+    }
+
+    submitButton.disabled = true;
+    status.textContent = "Sending...";
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          rating: selectedRating,
+          message: messageInput.value.trim()
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Something went wrong.");
+      }
+
+      status.textContent = "Thanks for your feedback! ❤️";
+
+      setTimeout(() => {
+        closeModal();
+      }, 1200);
+
+    } catch (error) {
+      console.error("Feedback error:", error);
+      status.textContent = "Could not submit feedback. Please try again.";
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+}
+/* ---------- Visitor Tracking ---------- */
+function initVisitorTracking() {
+  let visitorId = localStorage.getItem("yashtech_visitor_id");
+
+  if (!visitorId) {
+    visitorId =
+      "visitor_" +
+      Date.now() +
+      "_" +
+      Math.random().toString(36).substring(2, 10);
+
+    localStorage.setItem(
+      "yashtech_visitor_id",
+      visitorId
+    );
+  }
+
+  fetch("http://127.0.0.1:5000/api/visit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      visitor_id: visitorId,
+      page: window.location.pathname
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Visitor tracking:", data.message);
+    })
+    .catch(error => {
+      console.error(
+        "Visitor tracking error:",
+        error
+      );
+    });
 }
