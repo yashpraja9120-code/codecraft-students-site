@@ -6,17 +6,24 @@ import os
 from datetime import datetime
 
 app = Flask(__name__, static_folder=".", static_url_path="")
-app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
+
+# IMPORTANT:
+# Live deployment me SECRET_KEY environment variable me rakhenge.
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "dev-only-change-this-secret-key"
+)
 
 CORS(app, supports_credentials=True)
+
 bcrypt = Bcrypt(app)
 
-DATABASE = "yashtech.db"
+DATABASE = os.environ.get("DATABASE_PATH", "yashtech.db")
 
 
-# =========================
+# =========================================================
 # DATABASE
-# =========================
+# =========================================================
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
@@ -25,6 +32,7 @@ def get_db():
 
 
 def init_db():
+
     conn = get_db()
     cursor = conn.cursor()
 
@@ -76,21 +84,23 @@ def init_db():
 init_db()
 
 
-# =========================
-# HOME PAGE
-# =========================
+# =========================================================
+# WEBSITE FILES
+# =========================================================
 
 @app.route("/")
 def home():
     return send_from_directory(".", "index.html")
+
+
 @app.route("/<path:filename>")
 def serve_file(filename):
     return send_from_directory(".", filename)
 
 
-# =========================
+# =========================================================
 # SIGNUP
-# =========================
+# =========================================================
 
 @app.route("/api/signup", methods=["POST"])
 def signup():
@@ -127,9 +137,8 @@ def signup():
         }), 400
 
     conn = get_db()
-    cursor = conn.cursor()
 
-    existing_user = cursor.execute(
+    existing_user = conn.execute(
         "SELECT id FROM users WHERE email = ?",
         (email,)
     ).fetchone()
@@ -142,9 +151,15 @@ def signup():
             "message": "An account with this email already exists."
         }), 409
 
-    password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
+    password_hash = bcrypt.generate_password_hash(
+        password
+    ).decode("utf-8")
 
-    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    created_at = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    cursor = conn.cursor()
 
     cursor.execute("""
         INSERT INTO users
@@ -161,8 +176,13 @@ def signup():
 
     cursor.execute("""
         INSERT INTO progress
-        (user_id, completed_lessons, quiz_score,
-         progress_percentage, updated_at)
+        (
+            user_id,
+            completed_lessons,
+            quiz_score,
+            progress_percentage,
+            updated_at
+        )
         VALUES (?, 0, 0, 0, ?)
     """, (
         user_id,
@@ -178,9 +198,9 @@ def signup():
     })
 
 
-# =========================
+# =========================================================
 # LOGIN
-# =========================
+# =========================================================
 
 @app.route("/api/login", methods=["POST"])
 def login():
@@ -199,7 +219,11 @@ def login():
     conn = get_db()
 
     user = conn.execute(
-        "SELECT * FROM users WHERE email = ?",
+        """
+        SELECT *
+        FROM users
+        WHERE email = ?
+        """,
         (email,)
     ).fetchone()
 
@@ -235,9 +259,9 @@ def login():
     })
 
 
-# =========================
+# =========================================================
 # CURRENT USER
-# =========================
+# =========================================================
 
 @app.route("/api/me")
 def current_user():
@@ -250,13 +274,18 @@ def current_user():
     conn = get_db()
 
     user = conn.execute(
-        "SELECT id, name, email, created_at FROM users WHERE id = ?",
+        """
+        SELECT id, name, email, created_at
+        FROM users
+        WHERE id = ?
+        """,
         (session["user_id"],)
     ).fetchone()
 
     conn.close()
 
     if not user:
+
         session.clear()
 
         return jsonify({
@@ -269,9 +298,9 @@ def current_user():
     })
 
 
-# =========================
-# LOGOUT
-# =========================
+# =========================================================
+# USER LOGOUT
+# =========================================================
 
 @app.route("/api/logout", methods=["POST"])
 def logout():
@@ -284,9 +313,9 @@ def logout():
     })
 
 
-# =========================
+# =========================================================
 # STUDENT DASHBOARD
-# =========================
+# =========================================================
 
 @app.route("/api/dashboard")
 def dashboard():
@@ -308,14 +337,23 @@ def dashboard():
     """, (user_id,)).fetchone()
 
     progress = conn.execute("""
-        SELECT completed_lessons,
-               quiz_score,
-               progress_percentage
+        SELECT
+            completed_lessons,
+            quiz_score,
+            progress_percentage
         FROM progress
         WHERE user_id = ?
     """, (user_id,)).fetchone()
 
     conn.close()
+
+    if not user:
+        session.clear()
+
+        return jsonify({
+            "success": False,
+            "message": "User not found."
+        }), 404
 
     return jsonify({
         "success": True,
@@ -328,9 +366,9 @@ def dashboard():
     })
 
 
-# =========================
+# =========================================================
 # FEEDBACK
-# =========================
+# =========================================================
 
 @app.route("/api/feedback", methods=["POST"])
 def submit_feedback():
@@ -352,10 +390,20 @@ def submit_feedback():
         }), 400
 
     user_id = session.get("user_id")
-    name = session.get("user_name", data.get("name", "Guest"))
-    email = session.get("user_email", data.get("email", ""))
 
-    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    name = session.get(
+        "user_name",
+        data.get("name", "Guest")
+    )
+
+    email = session.get(
+        "user_email",
+        data.get("email", "")
+    )
+
+    created_at = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
 
     conn = get_db()
 
@@ -380,9 +428,9 @@ def submit_feedback():
     })
 
 
-# =========================
+# =========================================================
 # VISITOR TRACKING
-# =========================
+# =========================================================
 
 @app.route("/api/track-visit", methods=["POST"])
 def track_visit():
@@ -391,12 +439,16 @@ def track_visit():
 
     page = data.get("page", "/")
 
-    visitor_id = request.cookies.get("visitor_id")
+    visitor_id = request.cookies.get(
+        "visitor_id"
+    )
 
     if not visitor_id:
         visitor_id = os.urandom(16).hex()
 
-    visited_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    visited_at = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
 
     conn = get_db()
 
@@ -428,9 +480,9 @@ def track_visit():
     return response
 
 
-# =========================
+# =========================================================
 # WEBSITE STATISTICS
-# =========================
+# =========================================================
 
 @app.route("/api/stats")
 def stats():
@@ -445,7 +497,9 @@ def stats():
         "SELECT COUNT(DISTINCT visitor_id) FROM visits"
     ).fetchone()[0]
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now().strftime(
+        "%Y-%m-%d"
+    )
 
     today_visitors = conn.execute("""
         SELECT COUNT(DISTINCT visitor_id)
@@ -470,23 +524,44 @@ def stats():
     })
 
 
-# =========================
+# =========================================================
+# ADMIN CONFIGURATION
+# =========================================================
+
+ADMIN_EMAIL = os.environ.get(
+    "ADMIN_EMAIL",
+    "admin@yashtech.com"
+)
+
+ADMIN_PASSWORD = os.environ.get(
+    "ADMIN_PASSWORD",
+    "Admin@123"
+)
+
+
+# =========================================================
 # ADMIN LOGIN
-# =========================
-
-ADMIN_EMAIL = "admin@yashtech.com"
-ADMIN_PASSWORD = "Admin@123"
-
+# =========================================================
 
 @app.route("/api/admin/login", methods=["POST"])
 def admin_login():
 
-    data = request.get_json()
+    data = request.get_json() or {}
 
-    email = data.get("email", "")
-    password = data.get("password", "")
+    email = data.get(
+        "email",
+        ""
+    ).strip().lower()
 
-    if email == ADMIN_EMAIL and password == ADMIN_PASSWORD:
+    password = data.get(
+        "password",
+        ""
+    )
+
+    if (
+        email == ADMIN_EMAIL.lower()
+        and password == ADMIN_PASSWORD
+    ):
 
         session["admin_logged_in"] = True
 
@@ -501,23 +576,27 @@ def admin_login():
     }), 401
 
 
-# =========================
+# =========================================================
 # ADMIN AUTH CHECK
-# =========================
+# =========================================================
 
 def admin_required():
 
-    return session.get("admin_logged_in") is True
+    return (
+        session.get("admin_logged_in")
+        is True
+    )
 
 
-# =========================
-# ADMIN DASHBOARD DATA
-# =========================
+# =========================================================
+# ADMIN DASHBOARD
+# =========================================================
 
 @app.route("/api/admin/dashboard")
 def admin_dashboard():
 
     if not admin_required():
+
         return jsonify({
             "success": False,
             "message": "Admin access required."
@@ -526,19 +605,32 @@ def admin_dashboard():
     conn = get_db()
 
     students = conn.execute("""
-        SELECT id, name, email, created_at
+        SELECT
+            id,
+            name,
+            email,
+            created_at
         FROM users
         ORDER BY id DESC
     """).fetchall()
 
     feedback = conn.execute("""
-        SELECT id, name, email, message, created_at
+        SELECT
+            id,
+            name,
+            email,
+            message,
+            created_at
         FROM feedback
         ORDER BY id DESC
     """).fetchall()
 
     visits = conn.execute("""
-        SELECT id, visitor_id, page, visited_at
+        SELECT
+            id,
+            visitor_id,
+            page,
+            visited_at
         FROM visits
         ORDER BY id DESC
         LIMIT 100
@@ -548,43 +640,53 @@ def admin_dashboard():
 
     return jsonify({
         "success": True,
-        "students": [dict(row) for row in students],
-        "feedback": [dict(row) for row in feedback],
-        "visits": [dict(row) for row in visits]
+        "students": [
+            dict(row)
+            for row in students
+        ],
+        "feedback": [
+            dict(row)
+            for row in feedback
+        ],
+        "visits": [
+            dict(row)
+            for row in visits
+        ]
     })
 
 
-# =========================
+# =========================================================
 # ADMIN LOGOUT
-# =========================
+# =========================================================
 
 @app.route("/api/admin/logout", methods=["POST"])
 def admin_logout():
 
-    session.pop("admin_logged_in", None)
+    session.pop(
+        "admin_logged_in",
+        None
+    )
 
     return jsonify({
         "success": True
     })
 
 
-# =========================
-# RUN SERVER
-# =========================
+# =========================================================
+# RUN
+# =========================================================
 
 if __name__ == "__main__":
-    app.run(debug=True)
 
-    @app.route("/signup.html")
-    def signup_page():
-     return send_from_directory(".", "signup.html")
+    port = int(
+        os.environ.get(
+            "PORT",
+            5000
+        )
+    )
 
-
-@app.route("/login.html")
-def login_page():
-    return send_from_directory(".", "login.html")
-
-
-@app.route("/student-dashboard.html")
-def student_dashboard_page():
-    return send_from_directory(".", "student-dashboard.html")
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False
+    )
