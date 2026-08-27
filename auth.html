@@ -26,7 +26,7 @@
             background: white;
             padding: 35px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
@@ -67,6 +67,7 @@
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
+            font-size: 15px;
         }
 
         .submit-btn {
@@ -99,16 +100,23 @@
     <h1>YashTech</h1>
 
     <div class="tabs">
-        <button id="loginTab" class="active" onclick="showLogin()">
+
+        <button id="loginTab"
+                class="active"
+                onclick="showLogin()">
             Sign In
         </button>
 
-        <button id="signupTab" onclick="showSignup()">
+        <button id="signupTab"
+                onclick="showSignup()">
             Sign Up
         </button>
+
     </div>
 
-    <!-- LOGIN -->
+
+    <!-- ================= LOGIN ================= -->
+
     <form id="loginForm" class="form active">
 
         <input
@@ -132,7 +140,8 @@
     </form>
 
 
-    <!-- SIGN UP -->
+    <!-- ================= SIGN UP ================= -->
+
     <form id="signupForm" class="form">
 
         <input
@@ -162,6 +171,7 @@
 
     </form>
 
+
     <div id="message"></div>
 
 </div>
@@ -169,79 +179,155 @@
 
 <script>
 
-const API_URL = "http://127.0.0.1:5000";
+/*
+==================================================
+API CONFIGURATION
+==================================================
+
+Empty string means:
+
+Local:
+http://127.0.0.1:5000/api/signup
+
+Render:
+https://codecraft-students-site.onrender.com/api/signup
+
+The browser automatically uses the current website domain.
+*/
+
+const API_URL = "";
 
 
-// SWITCH TO LOGIN
+/*
+==================================================
+SWITCH TO LOGIN
+==================================================
+*/
+
 function showLogin() {
 
-    document.getElementById("loginForm").classList.add("active");
-    document.getElementById("signupForm").classList.remove("active");
+    document.getElementById("loginForm")
+        .classList.add("active");
 
-    document.getElementById("loginTab").classList.add("active");
-    document.getElementById("signupTab").classList.remove("active");
+    document.getElementById("signupForm")
+        .classList.remove("active");
 
-    document.getElementById("message").textContent = "";
+    document.getElementById("loginTab")
+        .classList.add("active");
+
+    document.getElementById("signupTab")
+        .classList.remove("active");
+
+    document.getElementById("message")
+        .textContent = "";
 }
 
 
-// SWITCH TO SIGNUP
+/*
+==================================================
+SWITCH TO SIGN UP
+==================================================
+*/
+
 function showSignup() {
 
-    document.getElementById("signupForm").classList.add("active");
-    document.getElementById("loginForm").classList.remove("active");
+    document.getElementById("signupForm")
+        .classList.add("active");
 
-    document.getElementById("signupTab").classList.add("active");
-    document.getElementById("loginTab").classList.remove("active");
+    document.getElementById("loginForm")
+        .classList.remove("active");
 
-    document.getElementById("message").textContent = "";
+    document.getElementById("signupTab")
+        .classList.add("active");
+
+    document.getElementById("loginTab")
+        .classList.remove("active");
+
+    document.getElementById("message")
+        .textContent = "";
 }
 
 
-// SIGNUP
-document.getElementById("signupForm").addEventListener("submit", async function(e) {
+/*
+==================================================
+SIGN UP
+==================================================
+*/
+
+document
+.getElementById("signupForm")
+.addEventListener("submit", async function(e) {
 
     e.preventDefault();
 
-    const name = document.getElementById("signupName").value;
-    const email = document.getElementById("signupEmail").value;
-    const password = document.getElementById("signupPassword").value;
+    const name =
+        document.getElementById("signupName").value.trim();
+
+    const email =
+        document.getElementById("signupEmail").value.trim();
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+
+    const message =
+        document.getElementById("message");
+
+
+    message.textContent = "Creating account...";
+
 
     try {
 
-        const response = await fetch(`${API_URL}/api/signup`, {
+        const response = await fetch(
+            `${API_URL}/api/signup`,
+            {
+                method: "POST",
 
-            method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                })
+            }
+        );
 
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                password: password
-            })
-
-        });
 
         const data = await response.json();
 
-        document.getElementById("message").textContent = data.message;
+
+        message.textContent =
+            data.message || "Something went wrong.";
+
 
         if (response.ok) {
 
-            document.getElementById("signupForm").reset();
+            document
+                .getElementById("signupForm")
+                .reset();
+
 
             setTimeout(() => {
-                showLogin();
-            }, 1000);
 
+                showLogin();
+
+                document
+                    .getElementById("loginEmail")
+                    .value = email;
+
+            }, 1000);
         }
+
 
     } catch (error) {
 
-        document.getElementById("message").textContent =
+        console.error("Signup error:", error);
+
+        message.textContent =
             "Unable to connect to server.";
 
     }
@@ -249,47 +335,104 @@ document.getElementById("signupForm").addEventListener("submit", async function(
 });
 
 
-// LOGIN
-document.getElementById("loginForm").addEventListener("submit", async function(e) {
+/*
+==================================================
+LOGIN
+==================================================
+*/
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", async function(e) {
 
     e.preventDefault();
 
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+
+    const message =
+        document.getElementById("message");
+
+
+    message.textContent = "Signing in...";
+
 
     try {
 
-        const response = await fetch(`${API_URL}/api/login`, {
+        const response = await fetch(
+            `${API_URL}/api/login`,
+            {
+                method: "POST",
 
-            method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            }
+        );
 
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-
-        });
 
         const data = await response.json();
 
-        document.getElementById("message").textContent = data.message;
+
+        message.textContent =
+            data.message || "Something went wrong.";
+
 
         if (response.ok) {
 
-            console.log("Logged in user:", data.user);
+            console.log(
+                "Logged in user:",
+                data.user
+            );
 
-            // Later we can redirect the user
-            // window.location.href = "index.html";
+
+            /*
+            ==========================================
+            SAVE USER INFORMATION
+            ==========================================
+            */
+
+            if (data.user) {
+
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify(data.user)
+                );
+
+            }
+
+
+            /*
+            ==========================================
+            REDIRECT TO STUDENT DASHBOARD
+            ==========================================
+            */
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "student-dashboard.html";
+
+            }, 700);
 
         }
 
+
     } catch (error) {
 
-        document.getElementById("message").textContent =
+        console.error("Login error:", error);
+
+        message.textContent =
             "Unable to connect to server.";
 
     }
