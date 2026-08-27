@@ -1,26 +1,22 @@
-from flask import Flask, request, jsonify, render_template, session, redirect
+from flask import Flask, request, jsonify, session, send_from_directory
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from functools import wraps
 import sqlite3
 import os
-import getpass
+from datetime import datetime
 
-app = Flask(__name__)
-
-# IMPORTANT:
-# Production mein is secret ko environment variable mein rakhna.
-app.secret_key = os.environ.get(
-    "SECRET_KEY",
-    "change-this-secret-key-before-production"
-)
+app = Flask(__name__, static_folder=".", static_url_path="")
+app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY"
 
 CORS(app, supports_credentials=True)
-
 bcrypt = Bcrypt(app)
 
 DATABASE = "yashtech.db"
 
+
+# =========================
+# DATABASE
+# =========================
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
@@ -28,49 +24,48 @@ def get_db():
     return conn
 
 
-# ---------- Database Initialization ----------
 def init_db():
-
     conn = get_db()
+    cursor = conn.cursor()
 
-    # Users
-    conn.execute("""
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            created_at TEXT NOT NULL
         )
     """)
 
-    # Feedback
-    conn.execute("""
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS feedback (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
-            message TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            user_id INTEGER,
+            name TEXT,
+            email TEXT,
+            message TEXT NOT NULL,
+            created_at TEXT NOT NULL
         )
     """)
 
-    # Website visits
-    conn.execute("""
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS visits (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             visitor_id TEXT,
             page TEXT,
-            visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            visited_at TEXT NOT NULL
         )
     """)
 
-    # Admin
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS admins (
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS progress (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            user_id INTEGER UNIQUE,
+            completed_lessons INTEGER DEFAULT 0,
+            quiz_score INTEGER DEFAULT 0,
+            progress_percentage INTEGER DEFAULT 0,
+            updated_at TEXT NOT NULL
         )
     """)
 
@@ -78,150 +73,128 @@ def init_db():
     conn.close()
 
 
-# ---------- Admin Setup ----------
-def setup_admin():
-
-    conn = get_db()
-
-    existing_admin = conn.execute(
-        "SELECT id FROM admins LIMIT 1"
-    ).fetchone()
-
-    conn.close()
-
-    if existing_admin:
-        return
-
-    print("\n===================================")
-    print("       YashTech Admin Setup")
-    print("===================================")
-
-    print("No admin account found.")
-    print("Create your admin account now.\n")
-
-    email = input("Admin email: ").strip()
-
-    while not email:
-        email = input("Admin email cannot be empty: ").strip()
-
-    password = getpass.getpass("Admin password: ")
-
-    while not password:
-        password = getpass.getpass(
-            "Admin password cannot be empty: "
-        )
-
-    confirm_password = getpass.getpass(
-        "Confirm admin password: "
-    )
-
-    while password != confirm_password:
-
-        print("Passwords do not match.")
-
-        password = getpass.getpass(
-            "Admin password: "
-        )
-
-        confirm_password = getpass.getpass(
-            "Confirm admin password: "
-        )
-
-    password_hash = bcrypt.generate_password_hash(
-        password
-    ).decode("utf-8")
-
-    conn = get_db()
-
-    conn.execute(
-        """
-        INSERT INTO admins (email, password_hash)
-        VALUES (?, ?)
-        """,
-        (email, password_hash)
-    )
-
-    conn.commit()
-    conn.close()
-
-    print("\nAdmin account created successfully!")
-    print("You can now use the admin dashboard.\n")
+init_db()
 
 
-# ---------- Home ----------
+# =========================
+# HOME PAGE
+# =========================
+
 @app.route("/")
 def home():
+    return send_from_directory(".", "index.html")
+@app.route("/<path:filename>")
+def serve_file(filename):
+    return send_from_directory(".", filename)
 
-    return jsonify({
-        "message": "YashTech Backend is running!"
-    })
 
+# =========================
+# SIGNUP
+# =========================
 
-# ---------- Signup ----------
 @app.route("/api/signup", methods=["POST"])
 def signup():
 
-    data = request.get_json(silent=True) or {}
+    data = request.get_json()
 
-    name = data.get("name")
-    email = data.get("email")
-    password = data.get("password")
+    if not data:
+        return jsonify({
+            "success": False,
+            "message": "Invalid request."
+        }), 400
+
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "")
+    confirm_password = data.get("confirm_password", "")
 
     if not name or not email or not password:
-
         return jsonify({
-            "message": "All fields are required"
+            "success": False,
+            "message": "All fields are required."
+        }), 400
+
+    if password != confirm_password:
+        return jsonify({
+            "success": False,
+            "message": "Passwords do not match."
+        }), 400
+
+    if len(password) < 6:
+        return jsonify({
+            "success": False,
+            "message": "Password must contain at least 6 characters."
         }), 400
 
     conn = get_db()
+    cursor = conn.cursor()
 
-    existing_user = conn.execute(
+    existing_user = cursor.execute(
         "SELECT id FROM users WHERE email = ?",
         (email,)
     ).fetchone()
 
     if existing_user:
-
         conn.close()
 
         return jsonify({
-            "message": "Email already registered"
+            "success": False,
+            "message": "An account with this email already exists."
         }), 409
 
-    password_hash = bcrypt.generate_password_hash(
-        password
-    ).decode("utf-8")
+    password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
-    conn.execute(
-        """
-        INSERT INTO users (name, email, password_hash)
-        VALUES (?, ?, ?)
-        """,
-        (name, email, password_hash)
-    )
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    cursor.execute("""
+        INSERT INTO users
+        (name, email, password_hash, created_at)
+        VALUES (?, ?, ?, ?)
+    """, (
+        name,
+        email,
+        password_hash,
+        created_at
+    ))
+
+    user_id = cursor.lastrowid
+
+    cursor.execute("""
+        INSERT INTO progress
+        (user_id, completed_lessons, quiz_score,
+         progress_percentage, updated_at)
+        VALUES (?, 0, 0, 0, ?)
+    """, (
+        user_id,
+        created_at
+    ))
 
     conn.commit()
     conn.close()
 
     return jsonify({
-        "message": "Account created successfully"
-    }), 201
+        "success": True,
+        "message": "Account created successfully."
+    })
 
 
-# ---------- User Login ----------
+# =========================
+# LOGIN
+# =========================
+
 @app.route("/api/login", methods=["POST"])
 def login():
 
-    data = request.get_json(silent=True) or {}
+    data = request.get_json()
 
-    email = data.get("email")
-    password = data.get("password")
-
-    if not email or not password:
-
+    if not data:
         return jsonify({
-            "message": "Email and password are required"
+            "success": False,
+            "message": "Invalid request."
         }), 400
+
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "")
 
     conn = get_db()
 
@@ -233,485 +206,385 @@ def login():
     conn.close()
 
     if not user:
-
         return jsonify({
-            "message": "Invalid email or password"
+            "success": False,
+            "message": "Invalid email or password."
         }), 401
 
     if not bcrypt.check_password_hash(
         user["password_hash"],
         password
     ):
-
         return jsonify({
-            "message": "Invalid email or password"
+            "success": False,
+            "message": "Invalid email or password."
         }), 401
 
+    session["user_id"] = user["id"]
+    session["user_name"] = user["name"]
+    session["user_email"] = user["email"]
+
     return jsonify({
-        "message": "Login successful",
+        "success": True,
+        "message": "Login successful.",
         "user": {
             "id": user["id"],
             "name": user["name"],
             "email": user["email"]
         }
-    }), 200
+    })
 
 
-# ---------- Feedback ----------
-@app.route("/api/feedback", methods=["POST"])
-def submit_feedback():
+# =========================
+# CURRENT USER
+# =========================
 
-    data = request.get_json(silent=True) or {}
+@app.route("/api/me")
+def current_user():
 
-    rating = data.get("rating")
-    message = data.get("message", "").strip()
-
-    try:
-        rating = int(rating)
-
-    except (TypeError, ValueError):
-
+    if "user_id" not in session:
         return jsonify({
-            "message": "Please provide a valid rating"
-        }), 400
-
-    if rating < 1 or rating > 5:
-
-        return jsonify({
-            "message": "Rating must be between 1 and 5"
-        }), 400
-
-    if len(message) > 1000:
-
-        return jsonify({
-            "message": "Feedback is too long"
-        }), 400
+            "logged_in": False
+        })
 
     conn = get_db()
 
-    conn.execute(
-        """
-        INSERT INTO feedback (rating, message)
-        VALUES (?, ?)
-        """,
-        (rating, message if message else None)
-    )
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({
-        "message": "Thank you for your feedback!"
-    }), 201
-
-
-# ---------- Track Visitor ----------
-@app.route("/api/visit", methods=["POST"])
-def track_visit():
-
-    data = request.get_json(silent=True) or {}
-
-    visitor_id = data.get("visitor_id")
-    page = data.get("page", "/")
-
-    if not visitor_id:
-
-        return jsonify({
-            "message": "Visitor ID is required"
-        }), 400
-
-    conn = get_db()
-
-    conn.execute(
-        """
-        INSERT INTO visits (visitor_id, page)
-        VALUES (?, ?)
-        """,
-        (visitor_id, page)
-    )
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({
-        "message": "Visit recorded"
-    }), 201
-
-
-# =====================================================
-#                    ADMIN SYSTEM
-# =====================================================
-
-
-# ---------- Admin Login Page ----------
-@app.route("/admin-login")
-def admin_login_page():
-
-    if session.get("admin_logged_in"):
-
-        return redirect("/admin")
-
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>YashTech Admin Login</title>
-
-        <meta name="viewport"
-              content="width=device-width, initial-scale=1.0">
-
-        <style>
-
-            * {
-                box-sizing: border-box;
-            }
-
-            body {
-                margin: 0;
-                min-height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-family: Arial, sans-serif;
-                background: #f5f5f5;
-            }
-
-            .login-box {
-                width: 100%;
-                max-width: 400px;
-                background: white;
-                padding: 30px;
-                border-radius: 14px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.10);
-            }
-
-            h1 {
-                margin-top: 0;
-            }
-
-            input {
-                width: 100%;
-                padding: 12px;
-                margin: 8px 0 15px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                font-size: 15px;
-            }
-
-            button {
-                width: 100%;
-                padding: 12px;
-                border: none;
-                border-radius: 8px;
-                background: #111;
-                color: white;
-                cursor: pointer;
-                font-size: 15px;
-            }
-
-            button:hover {
-                opacity: 0.9;
-            }
-
-            #message {
-                margin-top: 15px;
-                color: #c00;
-            }
-
-        </style>
-    </head>
-
-    <body>
-
-        <div class="login-box">
-
-            <h1>Admin Login</h1>
-
-            <p>YashTech Analytics Dashboard</p>
-
-            <form id="login-form">
-
-                <label>Email</label>
-
-                <input
-                    type="email"
-                    id="email"
-                    required
-                >
-
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    id="password"
-                    required
-                >
-
-                <button type="submit">
-                    Login
-                </button>
-
-            </form>
-
-            <div id="message"></div>
-
-        </div>
-
-
-        <script>
-
-            document
-                .getElementById("login-form")
-                .addEventListener("submit", async function(event) {
-
-                    event.preventDefault();
-
-                    const email =
-                        document.getElementById("email").value;
-
-                    const password =
-                        document.getElementById("password").value;
-
-                    const message =
-                        document.getElementById("message");
-
-                    try {
-
-                        const response = await fetch(
-                            "/api/admin/login",
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                credentials: "include",
-
-                                body: JSON.stringify({
-                                    email: email,
-                                    password: password
-                                })
-                            }
-                        );
-
-                        const data =
-                            await response.json();
-
-                        if (!response.ok) {
-
-                            message.textContent =
-                                data.message ||
-                                "Login failed";
-
-                            return;
-                        }
-
-                        window.location.href = "/admin";
-
-                    } catch (error) {
-
-                        console.error(error);
-
-                        message.textContent =
-                            "Unable to connect to server.";
-                    }
-
-                });
-
-        </script>
-
-    </body>
-    </html>
-    """
-
-
-# ---------- Admin Login API ----------
-@app.route("/api/admin/login", methods=["POST"])
-def admin_login():
-
-    data = request.get_json(silent=True) or {}
-
-    email = data.get("email")
-    password = data.get("password")
-
-    if not email or not password:
-
-        return jsonify({
-            "message": "Email and password are required"
-        }), 400
-
-    conn = get_db()
-
-    admin = conn.execute(
-        """
-        SELECT * FROM admins
-        WHERE email = ?
-        """,
-        (email,)
+    user = conn.execute(
+        "SELECT id, name, email, created_at FROM users WHERE id = ?",
+        (session["user_id"],)
     ).fetchone()
 
     conn.close()
 
-    if not admin:
+    if not user:
+        session.clear()
 
         return jsonify({
-            "message": "Invalid admin credentials"
-        }), 401
+            "logged_in": False
+        })
 
-    if not bcrypt.check_password_hash(
-        admin["password_hash"],
-        password
-    ):
+    return jsonify({
+        "logged_in": True,
+        "user": dict(user)
+    })
 
-        return jsonify({
-            "message": "Invalid admin credentials"
-        }), 401
+
+# =========================
+# LOGOUT
+# =========================
+
+@app.route("/api/logout", methods=["POST"])
+def logout():
 
     session.clear()
 
-    session["admin_logged_in"] = True
-    session["admin_id"] = admin["id"]
-    session["admin_email"] = admin["email"]
-
     return jsonify({
-        "message": "Admin login successful"
-    }), 200
+        "success": True,
+        "message": "Logged out successfully."
+    })
 
 
-# ---------- Admin Authentication ----------
-def admin_required(function):
+# =========================
+# STUDENT DASHBOARD
+# =========================
 
-    @wraps(function)
-    def decorated_function(*args, **kwargs):
+@app.route("/api/dashboard")
+def dashboard():
 
-        if not session.get("admin_logged_in"):
+    if "user_id" not in session:
+        return jsonify({
+            "success": False,
+            "message": "Please login first."
+        }), 401
 
-            if request.path == "/admin":
-
-                return redirect("/admin-login")
-
-            return jsonify({
-                "message": "Admin authentication required"
-            }), 401
-
-        return function(*args, **kwargs)
-
-    return decorated_function
-
-
-# ---------- Admin Dashboard ----------
-@app.route("/admin")
-@admin_required
-def admin_dashboard():
-
-    return render_template("admin.html")
-
-
-# ---------- Protected Analytics ----------
-@app.route("/api/analytics", methods=["GET"])
-@admin_required
-def analytics():
+    user_id = session["user_id"]
 
     conn = get_db()
 
-    total_visits = conn.execute(
-        "SELECT COUNT(*) AS count FROM visits"
-    ).fetchone()["count"]
+    user = conn.execute("""
+        SELECT id, name, email, created_at
+        FROM users
+        WHERE id = ?
+    """, (user_id,)).fetchone()
 
-    unique_visitors = conn.execute(
-        """
-        SELECT COUNT(DISTINCT visitor_id) AS count
-        FROM visits
-        """
-    ).fetchone()["count"]
-
-    total_feedback = conn.execute(
-        "SELECT COUNT(*) AS count FROM feedback"
-    ).fetchone()["count"]
-
-    average_rating = conn.execute(
-        "SELECT AVG(rating) AS average FROM feedback"
-    ).fetchone()["average"]
-
-    today_visits = conn.execute(
-        """
-        SELECT COUNT(*) AS count
-        FROM visits
-        WHERE DATE(visited_at) = DATE('now')
-        """
-    ).fetchone()["count"]
-
-    recent_feedback = conn.execute(
-        """
-        SELECT id, rating, message, created_at
-        FROM feedback
-        ORDER BY id DESC
-        LIMIT 20
-        """
-    ).fetchall()
-
-    daily_visits = conn.execute(
-        """
-        SELECT DATE(visited_at) AS date,
-               COUNT(*) AS visits
-        FROM visits
-        GROUP BY DATE(visited_at)
-        ORDER BY date DESC
-        LIMIT 7
-        """
-    ).fetchall()
+    progress = conn.execute("""
+        SELECT completed_lessons,
+               quiz_score,
+               progress_percentage
+        FROM progress
+        WHERE user_id = ?
+    """, (user_id,)).fetchone()
 
     conn.close()
 
     return jsonify({
-
-        "total_visits": total_visits,
-
-        "unique_visitors": unique_visitors,
-
-        "today_visits": today_visits,
-
-        "total_feedback": total_feedback,
-
-        "average_rating":
-            round(average_rating, 2)
-            if average_rating is not None else 0,
-
-        "recent_feedback": [
-            dict(row)
-            for row in recent_feedback
-        ],
-
-        "daily_visits": [
-            dict(row)
-            for row in daily_visits
-        ]
-
+        "success": True,
+        "user": dict(user),
+        "progress": dict(progress) if progress else {
+            "completed_lessons": 0,
+            "quiz_score": 0,
+            "progress_percentage": 0
+        }
     })
 
 
-# ---------- Admin Logout ----------
-@app.route("/api/admin/logout", methods=["POST"])
-@admin_required
-def admin_logout():
+# =========================
+# FEEDBACK
+# =========================
 
-    session.clear()
+@app.route("/api/feedback", methods=["POST"])
+def submit_feedback():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "success": False,
+            "message": "Invalid request."
+        }), 400
+
+    message = data.get("message", "").strip()
+
+    if not message:
+        return jsonify({
+            "success": False,
+            "message": "Feedback message is required."
+        }), 400
+
+    user_id = session.get("user_id")
+    name = session.get("user_name", data.get("name", "Guest"))
+    email = session.get("user_email", data.get("email", ""))
+
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    conn = get_db()
+
+    conn.execute("""
+        INSERT INTO feedback
+        (user_id, name, email, message, created_at)
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        user_id,
+        name,
+        email,
+        message,
+        created_at
+    ))
+
+    conn.commit()
+    conn.close()
 
     return jsonify({
-        "message": "Admin logged out successfully"
-    }), 200
+        "success": True,
+        "message": "Feedback submitted successfully."
+    })
 
 
-# ---------- Start Server ----------
-if __name__ == "__main__":
+# =========================
+# VISITOR TRACKING
+# =========================
 
-    init_db()
+@app.route("/api/track-visit", methods=["POST"])
+def track_visit():
 
-    setup_admin()
+    data = request.get_json() or {}
 
-    app.run(
-        debug=True,
-        port=5000
+    page = data.get("page", "/")
+
+    visitor_id = request.cookies.get("visitor_id")
+
+    if not visitor_id:
+        visitor_id = os.urandom(16).hex()
+
+    visited_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    conn = get_db()
+
+    conn.execute("""
+        INSERT INTO visits
+        (visitor_id, page, visited_at)
+        VALUES (?, ?, ?)
+    """, (
+        visitor_id,
+        page,
+        visited_at
+    ))
+
+    conn.commit()
+    conn.close()
+
+    response = jsonify({
+        "success": True
+    })
+
+    response.set_cookie(
+        "visitor_id",
+        visitor_id,
+        max_age=60 * 60 * 24 * 365,
+        httponly=True,
+        samesite="Lax"
     )
+
+    return response
+
+
+# =========================
+# WEBSITE STATISTICS
+# =========================
+
+@app.route("/api/stats")
+def stats():
+
+    conn = get_db()
+
+    total_students = conn.execute(
+        "SELECT COUNT(*) FROM users"
+    ).fetchone()[0]
+
+    total_visitors = conn.execute(
+        "SELECT COUNT(DISTINCT visitor_id) FROM visits"
+    ).fetchone()[0]
+
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    today_visitors = conn.execute("""
+        SELECT COUNT(DISTINCT visitor_id)
+        FROM visits
+        WHERE visited_at LIKE ?
+    """, (
+        today + "%",
+    )).fetchone()[0]
+
+    total_feedback = conn.execute(
+        "SELECT COUNT(*) FROM feedback"
+    ).fetchone()[0]
+
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "total_students": total_students,
+        "total_visitors": total_visitors,
+        "today_visitors": today_visitors,
+        "total_feedback": total_feedback
+    })
+
+
+# =========================
+# ADMIN LOGIN
+# =========================
+
+ADMIN_EMAIL = "admin@yashtech.com"
+ADMIN_PASSWORD = "Admin@123"
+
+
+@app.route("/api/admin/login", methods=["POST"])
+def admin_login():
+
+    data = request.get_json()
+
+    email = data.get("email", "")
+    password = data.get("password", "")
+
+    if email == ADMIN_EMAIL and password == ADMIN_PASSWORD:
+
+        session["admin_logged_in"] = True
+
+        return jsonify({
+            "success": True,
+            "message": "Admin login successful."
+        })
+
+    return jsonify({
+        "success": False,
+        "message": "Invalid admin credentials."
+    }), 401
+
+
+# =========================
+# ADMIN AUTH CHECK
+# =========================
+
+def admin_required():
+
+    return session.get("admin_logged_in") is True
+
+
+# =========================
+# ADMIN DASHBOARD DATA
+# =========================
+
+@app.route("/api/admin/dashboard")
+def admin_dashboard():
+
+    if not admin_required():
+        return jsonify({
+            "success": False,
+            "message": "Admin access required."
+        }), 403
+
+    conn = get_db()
+
+    students = conn.execute("""
+        SELECT id, name, email, created_at
+        FROM users
+        ORDER BY id DESC
+    """).fetchall()
+
+    feedback = conn.execute("""
+        SELECT id, name, email, message, created_at
+        FROM feedback
+        ORDER BY id DESC
+    """).fetchall()
+
+    visits = conn.execute("""
+        SELECT id, visitor_id, page, visited_at
+        FROM visits
+        ORDER BY id DESC
+        LIMIT 100
+    """).fetchall()
+
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "students": [dict(row) for row in students],
+        "feedback": [dict(row) for row in feedback],
+        "visits": [dict(row) for row in visits]
+    })
+
+
+# =========================
+# ADMIN LOGOUT
+# =========================
+
+@app.route("/api/admin/logout", methods=["POST"])
+def admin_logout():
+
+    session.pop("admin_logged_in", None)
+
+    return jsonify({
+        "success": True
+    })
+
+
+# =========================
+# RUN SERVER
+# =========================
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+    @app.route("/signup.html")
+    def signup_page():
+     return send_from_directory(".", "signup.html")
+
+
+@app.route("/login.html")
+def login_page():
+    return send_from_directory(".", "login.html")
+
+
+@app.route("/student-dashboard.html")
+def student_dashboard_page():
+    return send_from_directory(".", "student-dashboard.html")
