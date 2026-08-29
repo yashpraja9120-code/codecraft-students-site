@@ -1,5 +1,5 @@
 /**
- * CodeCraft Students — shared site behaviour.
+ * YashTech — shared site behaviour.
  * No frameworks, no build step: plain DOM APIs so the site stays
  * fast and easy to host anywhere (including free static hosts).
  */

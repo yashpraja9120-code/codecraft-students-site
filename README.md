@@ -1,4 +1,4 @@
-# CodeCraft Students
+# YashTech
 
 A static, SEO-friendly website (HTML + CSS + vanilla JavaScript, no
 build tools, no frameworks) built for AdSense monetization in the
