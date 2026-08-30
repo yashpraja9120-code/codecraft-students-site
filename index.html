@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>YashTech — Technology, AI & Programming for Students</title>
+  <title>YashTech — Technology, AI &amp; Programming for Students</title>
 
   <meta name="description"
     content="Free, plain-language guides on programming, AI, and computer science fundamentals, written for students.">
@@ -17,14 +17,14 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="YashTech">
   <meta property="og:title"
-    content="YashTech &mdash; Technology, AI & programming, explained for students">
+    content="YashTech &mdash; Technology, AI &amp; programming, explained for students">
   <meta property="og:description"
     content="Free, plain-language guides on programming, AI, and computer science fundamentals, written for students.">
   <meta property="og:url" content="https://www.codecraftstudents.example/index.html">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title"
-    content="YashTech &mdash; Technology, AI & programming, explained for students">
+    content="YashTech &mdash; Technology, AI &amp; programming, explained for students">
   <meta name="twitter:description"
     content="Free, plain-language guides on programming, AI, and computer science fundamentals, written for students.">
 
@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css">
@@ -50,9 +50,871 @@
   }
   </script>
 
+  <style>
+    /* =========================================
+       THEME VARIABLES & ENHANCED STYLING
+    ========================================= */
+    :root {
+      --bg-dark: #070a13;
+      --bg-surface: #0b1120;
+      --bg-card: rgba(15, 23, 42, 0.7);
+      --bg-card-hover: rgba(20, 31, 56, 0.88);
+      --accent-cyan: #6FE3D2;
+      --accent-cyan-glow: rgba(111, 227, 210, 0.35);
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(111, 227, 210, 0.28);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-heading: 'Space Grotesk', -apple-system, sans-serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --shadow-3d: 0 30px 60px -15px rgba(0, 0, 0, 0.6), 0 0 35px rgba(111, 227, 210, 0.08);
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Interactive Background Canvas */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+
+    /* Ambient Glowing Orbs */
+    .ambient-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(130px);
+      opacity: 0.14;
+      animation: floatOrb 22s infinite alternate ease-in-out;
+    }
+
+    .ambient-glow-1 {
+      top: -120px;
+      right: -80px;
+      background: radial-gradient(circle, #6FE3D2, transparent 70%);
+    }
+
+    .ambient-glow-2 {
+      bottom: 15%;
+      left: -120px;
+      background: radial-gradient(circle, #a855f7, transparent 70%);
+      animation-duration: 26s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-40px, 50px) scale(1.1); }
+      100% { transform: translate(50px, -30px) scale(0.95); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Enhanced Eyebrow Tag */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border: 1px solid var(--border-glow);
+      border-radius: 999px;
+      background: rgba(111, 227, 210, 0.08);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-cyan);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      margin-bottom: 16px;
+    }
+
+    /* Live Student Beacon */
+    .live-beacon {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #34d399;
+      margin-bottom: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      position: relative;
+    }
+
+    .live-dot::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      background: #10b981;
+      animation: pulseRadar 2s infinite ease-out;
+    }
+
+    @keyframes pulseRadar {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(3); opacity: 0; }
+    }
+
+    /* =========================================
+       HERO SECTION & 3D TERMINAL
+    ========================================= */
+    .hero {
+      padding: 100px 0 75px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(38px, 5.2vw, 68px);
+      line-height: 1.08;
+      letter-spacing: -2px;
+      margin: 0 0 20px;
+      color: #ffffff;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, #ffffff 20%, var(--accent-cyan) 75%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 0 30px;
+    }
+
+    /* Hero Buttons */
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 26px;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14.5px;
+      text-decoration: none;
+      transition: all 0.3s var(--ease-smooth);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, #38bdf8 100%);
+      color: #050b14 !important;
+      font-weight: 700;
+      border: none;
+      box-shadow: 0 10px 25px rgba(111, 227, 210, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(111, 227, 210, 0.45);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-outline:hover {
+      background: rgba(111, 227, 210, 0.08);
+      border-color: var(--border-glow);
+      color: var(--accent-cyan);
+      transform: translateY(-3px);
+    }
+
+    /* Hero Stats */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 580px;
+    }
+
+    .hero-stats > div {
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .hero-stats > div:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-stats strong {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      line-height: 1.2;
+    }
+
+    .hero-stats span {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* 3D Perspective Terminal */
+    .terminal-wrap {
+      perspective: 1200px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .terminal {
+      width: 100%;
+      max-width: 440px;
+      border-radius: 20px;
+      background: rgba(11, 17, 32, 0.85);
+      border: 1px solid rgba(111, 227, 210, 0.3);
+      box-shadow: var(--shadow-3d);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      will-change: transform;
+      position: relative;
+    }
+
+    .terminal::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .terminal-bar span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .terminal-bar span:nth-child(1) { background: #ef4444; }
+    .terminal-bar span:nth-child(2) { background: #f59e0b; }
+    .terminal-bar span:nth-child(3) { background: #10b981; }
+
+    .terminal-bar::after {
+      content: "yash@yashtech: ~";
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: auto;
+      opacity: 0.7;
+    }
+
+    .terminal-body {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #cbd5e1;
+    }
+
+    .terminal-body .comment {
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .terminal-body .prompt {
+      color: var(--accent-cyan);
+      font-weight: 700;
+      margin-right: 8px;
+      user-select: none;
+    }
+
+    .terminal-body .line {
+      margin: 0 0 10px;
+    }
+
+    .terminal-body .line:last-child {
+      margin-bottom: 0;
+    }
+
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: var(--accent-cyan);
+      vertical-align: middle;
+      animation: blinkCursor 1s step-end infinite;
+    }
+
+    @keyframes blinkCursor {
+      50% { opacity: 0; }
+    }
+
+    /* =========================================
+       SECTIONS & MODERN GLASS CARDS
+    ========================================= */
+    .section {
+      padding: 75px 0;
+      position: relative;
+    }
+
+    .section-alt {
+      background: rgba(255, 255, 255, 0.015);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(30px, 4vw, 44px);
+      margin: 8px 0 0;
+      letter-spacing: -1.5px;
+      color: #fff;
+    }
+
+    /* Feature Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      padding: 34px 28px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      transition: all 0.35s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(111, 227, 210, 0.12), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.6), 0 0 25px rgba(111, 227, 210, 0.1);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      background: rgba(111, 227, 210, 0.08);
+      border: 1px solid var(--border-glow);
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
+      background: rgba(111, 227, 210, 0.15);
+    }
+
+    .feature-card h3 {
+      font-family: var(--font-heading);
+      font-size: 21px;
+      margin: 0 0 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    /* =======================================================
+       DYNAMIC 3D ARTICLE CARDS & TOPIC VISUAL BLOCKS
+    ======================================================= */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Base Article Card Enhancement */
+    .article-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(20px);
+      transition: transform 0.35s var(--ease-smooth), border-color 0.35s ease, box-shadow 0.35s ease;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .article-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--card-accent, var(--border-glow));
+      background: var(--bg-card-hover);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65), 0 0 30px var(--card-glow, rgba(111, 227, 210, 0.15));
+    }
+
+    /* 3D Visual Block Container at Card Top */
+    .article-3d-visual {
+      width: 100%;
+      height: 145px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(7, 10, 19, 0.95));
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .article-3d-visual-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s var(--ease-smooth);
+    }
+
+    .article-card:hover .article-3d-visual-inner {
+      transform: scale(1.06) translateZ(20px);
+    }
+
+    /* 3D Visual Mesh Background */
+    .visual-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    }
+
+    /* Glowing Topic Ambient Halo */
+    .visual-glow {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.28;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .article-card:hover .visual-glow {
+      opacity: 0.45;
+      transform: scale(1.15);
+    }
+
+    /* Topic Floating Pill Badge */
+    .visual-pill {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: rgba(11, 17, 32, 0.85);
+      border: 1px solid var(--card-accent, rgba(111, 227, 210, 0.3));
+      color: var(--card-accent, var(--accent-cyan));
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      z-index: 2;
+    }
+
+    /* Floating Micro Tech Chip */
+    .visual-chip {
+      position: absolute;
+      bottom: 12px;
+      left: 14px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      z-index: 2;
+    }
+
+    /* Floating 3D Geometric Graphics */
+    .visual-graphic {
+      width: 76px;
+      height: 76px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+    }
+
+    .visual-svg {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s var(--ease-smooth);
+    }
+
+    .article-card:hover .visual-svg {
+      transform: rotateY(15deg) rotateX(-10deg) scale(1.08);
+    }
+
+    /* TOPIC THEME CUSTOMIZATIONS */
+    /* 1. Python Theme */
+    .topic-python {
+      --card-accent: #38bdf8;
+      --card-glow: rgba(56, 189, 248, 0.25);
+    }
+    .topic-python .visual-glow { background: radial-gradient(circle, #38bdf8, #f59e0b); }
+
+    /* 2. AI & Deep Learning Theme */
+    .topic-ai {
+      --card-accent: #a855f7;
+      --card-glow: rgba(168, 85, 247, 0.28);
+    }
+    .topic-ai .visual-glow { background: radial-gradient(circle, #a855f7, #6FE3D2); }
+
+    /* 3. Machine Learning Theme */
+    .topic-ml {
+      --card-accent: #6FE3D2;
+      --card-glow: rgba(111, 227, 210, 0.28);
+    }
+    .topic-ml .visual-glow { background: radial-gradient(circle, #6FE3D2, #3b82f6); }
+
+    /* 4. Data Science & Analytics Theme */
+    .topic-datascience {
+      --card-accent: #10b981;
+      --card-glow: rgba(16, 185, 129, 0.28);
+    }
+    .topic-datascience .visual-glow { background: radial-gradient(circle, #10b981, #38bdf8); }
+
+    /* 5. DSA & Algorithms Theme */
+    .topic-dsa {
+      --card-accent: #f59e0b;
+      --card-glow: rgba(245, 158, 11, 0.28);
+    }
+    .topic-dsa .visual-glow { background: radial-gradient(circle, #f59e0b, #ef4444); }
+
+    /* 6. SQL & Database Theme */
+    .topic-sql {
+      --card-accent: #6366f1;
+      --card-glow: rgba(99, 102, 241, 0.28);
+    }
+    .topic-sql .visual-glow { background: radial-gradient(circle, #6366f1, #38bdf8); }
+
+    /* 7. Git & Version Control Theme */
+    .topic-git {
+      --card-accent: #f43f5e;
+      --card-glow: rgba(244, 63, 94, 0.28);
+    }
+    .topic-git .visual-glow { background: radial-gradient(circle, #f43f5e, #f59e0b); }
+
+    /* 8. Web Development Theme */
+    .topic-web {
+      --card-accent: #eab308;
+      --card-glow: rgba(234, 179, 8, 0.28);
+    }
+    .topic-web .visual-glow { background: radial-gradient(circle, #eab308, #6FE3D2); }
+
+    /* 9. General / Future Topics Fallback */
+    .topic-general {
+      --card-accent: #6FE3D2;
+      --card-glow: rgba(111, 227, 210, 0.25);
+    }
+    .topic-general .visual-glow { background: radial-gradient(circle, #6FE3D2, #a855f7); }
+
+    /* Article Card Body Details */
+    .article-card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-family: var(--font-mono);
+    }
+
+    .article-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin: 0 0 10px;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .article-desc {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin: 0 0 20px;
+      flex: 1;
+    }
+
+    .article-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--card-accent, var(--accent-cyan));
+    }
+
+    .article-footer svg {
+      transition: transform 0.3s ease;
+    }
+
+    .article-card:hover .article-footer svg {
+      transform: translateX(4px);
+    }
+
+    /* CTA Band / Banner (Holographic Cyber Glow) */
+    .cta-band {
+      position: relative;
+      overflow: hidden;
+      padding: 50px 45px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-glow);
+      background: linear-gradient(
+        135deg,
+        rgba(111, 227, 210, 0.1) 0%,
+        rgba(15, 23, 42, 0.85) 50%,
+        rgba(168, 85, 247, 0.08) 100%
+      );
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-3d);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .cta-band h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(26px, 3.5vw, 38px);
+      letter-spacing: -1px;
+      margin: 0 0 12px;
+      color: #fff;
+    }
+
+    .cta-band p {
+      color: #cbd5e1;
+      font-size: 16px;
+      max-width: 640px;
+      line-height: 1.7;
+      margin: 0 0 20px;
+    }
+
+    .cta-band a.btn {
+      flex-shrink: 0;
+    }
+
+    /* Scroll Reveal Utilities */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+    }
+
+    .reveal-on-scroll.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+      }
+      .terminal-wrap {
+        order: -1;
+      }
+      .feature-grid, .article-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 60px 0 50px;
+      }
+      .feature-grid, .article-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+      .cta-band {
+        padding: 30px 24px;
+      }
+      .hero-ctas {
+        flex-direction: column;
+      }
+      .hero-ctas .btn {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      #bg-canvas {
+        display: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
+
+  <!-- Ambient Animated Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="ambient-glow ambient-glow-1"></div>
+  <div class="ambient-glow ambient-glow-2"></div>
 
   <a class="skip-link" href="#main">Skip to content</a>
 
@@ -123,14 +985,22 @@
 
       <div class="container hero-grid">
 
-        <div>
+        <div class="reveal-on-scroll">
 
-          <span class="eyebrow">
-            for students, by people who still Google syntax
-          </span>
+          <!-- Live beacon -->
+          <div class="live-beacon">
+            <span class="live-dot"></span>
+            <span>Free Tech Knowledge Base for Students</span>
+          </div>
+
+          <div>
+            <span class="eyebrow">
+              for students, by people who still Google syntax
+            </span>
+          </div>
 
           <h1>
-            Learn programming and AI the way it actually clicks.
+            Learn programming and AI <span class="highlight">the way it actually clicks.</span>
           </h1>
 
           <p class="hero-sub">
@@ -144,7 +1014,8 @@
           <div class="hero-ctas">
 
             <a href="blog.html" class="btn btn-primary">
-              Browse all articles
+              <span>Browse all articles</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
 
             <a href="about.html" class="btn btn-outline">
@@ -175,46 +1046,45 @@
         </div>
 
 
-        <div class="terminal" aria-hidden="true">
+        <div class="terminal-wrap reveal-on-scroll">
 
-          <div class="terminal-bar">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
+          <div class="terminal" id="hero-terminal" aria-hidden="true">
 
-          <div class="terminal-body">
+            <div class="terminal-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
 
-            <p class="line">
-              <span class="comment">
-                # what you'll actually learn here
-              </span>
-            </p>
+            <div class="terminal-body">
 
-            <p class="line">
-              <span class="prompt">$</span>
-              learn --topic="python basics"
-            </p>
+              <p class="line">
+                <span class="comment">
+                  # what you'll actually learn here
+                </span>
+              </p>
 
-            <p class="line">
-              <span class="prompt">$</span>
-              learn --topic="how neural nets work"
-            </p>
+              <p class="line">
+                <span class="prompt">$</span>learn --topic="python basics"
+              </p>
 
-            <p class="line">
-              <span class="prompt">$</span>
-              learn --topic="git without fear"
-            </p>
+              <p class="line">
+                <span class="prompt">$</span>learn --topic="how neural nets work"
+              </p>
 
-            <p class="line">
-              <span class="prompt">$</span>
-              learn --topic="debugging like a pro"
-            </p>
+              <p class="line">
+                <span class="prompt">$</span>learn --topic="git without fear"
+              </p>
 
-            <p class="line">
-              <span class="prompt">$</span>
-              <span class="terminal-cursor"></span>
-            </p>
+              <p class="line">
+                <span class="prompt">$</span>learn --topic="debugging like a pro"
+              </p>
+
+              <p class="line">
+                <span class="prompt">$</span><span class="terminal-cursor"></span>
+              </p>
+
+            </div>
 
           </div>
 
@@ -227,7 +1097,7 @@
 
     <!-- FEATURES -->
 
-    <section class="section">
+    <section class="section reveal-on-scroll">
 
       <div class="container">
 
@@ -281,9 +1151,9 @@
     </section>
 
 
-    <!-- LATEST GUIDES -->
+    <!-- LATEST GUIDES WITH 3D TOPIC VISUAL CARDS -->
 
-    <section class="section section-alt">
+    <section class="section section-alt reveal-on-scroll">
 
       <div class="container">
 
@@ -302,11 +1172,13 @@
           </div>
 
           <a href="blog.html" class="btn btn-outline">
-            View all articles
+            <span>View all articles</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
 
         </div>
 
+        <!-- Preserved hook data-blog-grid with automatic 3D visual generation -->
         <div
           class="article-grid"
           data-blog-grid
@@ -316,42 +1188,46 @@
       </div>
 
     </section>
-<!-- PYTHON & DSA SECTION -->
-<section class="section">
-  <div class="container">
 
-    <div class="section-head">
-      <div>
-        <span class="eyebrow">my learning journey</span>
-        <h2>Python &amp; DSA</h2>
+
+    <!-- PYTHON & DSA SECTION -->
+    <section class="section reveal-on-scroll">
+      <div class="container">
+
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">my learning journey</span>
+            <h2>Python &amp; DSA</h2>
+          </div>
+        </div>
+
+        <div class="cta-band">
+          <div>
+            <h2>Learn Python. Practice DSA. Build Skills.</h2>
+
+            <p>
+              Follow my Python and Data Structures journey with practical
+              code, concepts, and problem-solving practice.
+            </p>
+
+            <a
+              href="https://github.com/yashpraja9120-code/DSA-Python"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary">
+              <span>Explore Python &amp; DSA</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </section>
 
-    <div class="cta-band">
-      <div>
-        <h2>Learn Python. Practice DSA. Build Skills.</h2>
-
-        <p>
-          Follow my Python and Data Structures journey with practical
-          code, concepts, and problem-solving practice.
-        </p>
-
-        <a
-          href="https://github.com/yashpraja9120-code/DSA-Python"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-primary">
-          Explore Python &amp; DSA
-        </a>
-      </div>
-    </div>
-
-  </div>
-</section>
 
     <!-- SEARCH CTA -->
 
-    <section class="section">
+    <section class="section reveal-on-scroll">
 
       <div class="container">
 
@@ -371,7 +1247,8 @@
           </div>
 
           <a href="search.html" class="btn btn-primary">
-            Open search
+            <span>Open search</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           </a>
 
         </div>
@@ -491,8 +1368,389 @@
 
 
   <script src="js/articles-data.js"></script>
-
   <script src="js/main.js"></script>
+
+  <!-- ========================================================
+       DYNAMIC 3D TOPIC ENGINE, 3D TILT & PARTICLES SCRIPT
+  ======================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. Auto-update Year if main.js hasn't
+      const yearElem = document.querySelector('[data-year]');
+      if (yearElem && !yearElem.textContent) {
+        yearElem.textContent = new Date().getFullYear();
+      }
+
+      // ========================================================
+      // 2. DYNAMIC 3D TOPIC VISUAL GENERATOR FOR ARTICLE CARDS
+      // ========================================================
+      
+      // Detection function: inspects category, title, tags, or text
+      function detectTopic(card) {
+        const text = (
+          (card.getAttribute('data-category') || '') + ' ' +
+          (card.getAttribute('data-topic') || '') + ' ' +
+          (card.querySelector('.article-category, .tag, h3, h2, .article-title')?.textContent || '') + ' ' +
+          (card.textContent || '')
+        ).toLowerCase();
+
+        if (text.includes('python') || text.includes('py ')) return 'python';
+        if (text.includes('neural') || text.includes('deep learning') || text.includes('artificial intelligence') || text.includes('gpt') || text.includes('llm') || text.includes('ai')) return 'ai';
+        if (text.includes('machine learning') || text.includes('ml ') || text.includes('model') || text.includes('train')) return 'ml';
+        if (text.includes('data structure') || text.includes('algorithm') || text.includes('dsa') || text.includes('tree') || text.includes('graph') || text.includes('sorting')) return 'dsa';
+        if (text.includes('data science') || text.includes('analytics') || text.includes('pandas') || text.includes('numpy') || text.includes('data')) return 'datascience';
+        if (text.includes('sql') || text.includes('database') || text.includes('query') || text.includes('postgres') || text.includes('mysql')) return 'sql';
+        if (text.includes('git') || text.includes('github') || text.includes('version control')) return 'git';
+        if (text.includes('web') || text.includes('javascript') || text.includes('html') || text.includes('css') || text.includes('frontend')) return 'web';
+        return 'general';
+      }
+
+      // Topic 3D SVG & Pill definitions
+      const TOPIC_CONFIG = {
+        python: {
+          label: 'PYTHON',
+          chip: 'def main():',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <rect x="22" y="22" width="34" height="34" rx="8" stroke="#38bdf8" stroke-width="3.5" fill="rgba(56,189,248,0.12)"/>
+              <rect x="44" y="44" width="34" height="34" rx="8" stroke="#f59e0b" stroke-width="3.5" fill="rgba(245,158,11,0.12)"/>
+              <circle cx="34" cy="34" r="3.5" fill="#38bdf8"/>
+              <circle cx="66" cy="66" r="3.5" fill="#f59e0b"/>
+              <path d="M40 22v12a6 6 0 0 0 6 6h12" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="3 3"/>
+            </svg>`
+        },
+        ai: {
+          label: 'AI / NEURAL',
+          chip: 'σ(w·x + b)',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <!-- Synaptic Neural Connections -->
+              <line x1="25" y1="30" x2="50" y2="50" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
+              <line x1="25" y1="70" x2="50" y2="50" stroke="#a855f7" stroke-width="2" opacity="0.6"/>
+              <line x1="50" y1="50" x2="75" y2="35" stroke="#6FE3D2" stroke-width="2" opacity="0.8"/>
+              <line x1="50" y1="50" x2="75" y2="65" stroke="#6FE3D2" stroke-width="2" opacity="0.8"/>
+              <!-- Nodes -->
+              <circle cx="25" cy="30" r="6" fill="#a855f7" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="25" cy="70" r="6" fill="#a855f7" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="50" cy="50" r="9" fill="#0f172a" stroke="#a855f7" stroke-width="3"/>
+              <circle cx="50" cy="50" r="4" fill="#6FE3D2"/>
+              <circle cx="75" cy="35" r="6" fill="#6FE3D2" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="75" cy="65" r="6" fill="#6FE3D2" stroke="#fff" stroke-width="1.5"/>
+            </svg>`
+        },
+        ml: {
+          label: 'MACHINE LEARNING',
+          chip: 'Epoch [100/100]',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="32" stroke="#6FE3D2" stroke-width="2" stroke-dasharray="4 4"/>
+              <polygon points="50,24 74,68 26,68" stroke="#38bdf8" stroke-width="2.5" fill="rgba(111,227,210,0.1)"/>
+              <circle cx="50" cy="24" r="4.5" fill="#6FE3D2"/>
+              <circle cx="74" cy="68" r="4.5" fill="#38bdf8"/>
+              <circle cx="26" cy="68" r="4.5" fill="#a855f7"/>
+              <circle cx="50" cy="53" r="5" fill="#fff"/>
+            </svg>`
+        },
+        datascience: {
+          label: 'DATA SCIENCE',
+          chip: 'df.describe()',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <!-- 3D Isometric Data Pillars -->
+              <rect x="22" y="52" width="14" height="28" rx="3" fill="#10b981" opacity="0.85"/>
+              <rect x="43" y="34" width="14" height="46" rx="3" fill="#38bdf8" opacity="0.85"/>
+              <rect x="64" y="22" width="14" height="58" rx="3" fill="#6FE3D2" opacity="0.95"/>
+              <!-- Trend Line -->
+              <path d="M22 56 L43 38 L64 24 L78 18" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="78" cy="18" r="3.5" fill="#f59e0b"/>
+            </svg>`
+        },
+        dsa: {
+          label: 'DSA &amp; ALGO',
+          chip: 'O(log N)',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <!-- Binary Tree Graph -->
+              <line x1="50" y1="26" x2="30" y2="52" stroke="#f59e0b" stroke-width="2.5"/>
+              <line x1="50" y1="26" x2="70" y2="52" stroke="#f59e0b" stroke-width="2.5"/>
+              <line x1="30" y1="52" x2="20" y2="74" stroke="#f59e0b" stroke-width="2"/>
+              <line x1="30" y1="52" x2="40" y2="74" stroke="#f59e0b" stroke-width="2"/>
+              <circle cx="50" cy="26" r="7" fill="#f59e0b" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="30" cy="52" r="6" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+              <circle cx="70" cy="52" r="6" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+              <circle cx="20" cy="74" r="4.5" fill="#ef4444"/>
+              <circle cx="40" cy="74" r="4.5" fill="#10b981"/>
+            </svg>`
+        },
+        sql: {
+          label: 'SQL / DATABASE',
+          chip: 'SELECT * FROM',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <!-- 3D Database Cylinders -->
+              <ellipse cx="50" cy="30" rx="26" ry="9" stroke="#6366f1" stroke-width="2.5" fill="rgba(99,102,241,0.2)"/>
+              <path d="M24 30v18c0 5 11.6 9 26 9s26-4 26-9V30" stroke="#6366f1" stroke-width="2.5"/>
+              <path d="M24 48v18c0 5 11.6 9 26 9s26-4 26-9V48" stroke="#38bdf8" stroke-width="2.5"/>
+              <ellipse cx="50" cy="30" rx="8" ry="3" fill="#6FE3D2"/>
+            </svg>`
+        },
+        git: {
+          label: 'GIT &amp; TOOLS',
+          chip: 'git commit -m',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <!-- Branching Graph -->
+              <line x1="32" y1="20" x2="32" y2="80" stroke="#f43f5e" stroke-width="3"/>
+              <path d="M32 40 C 55 40, 68 50, 68 64 L 68 80" stroke="#f59e0b" stroke-width="2.5" fill="none"/>
+              <circle cx="32" cy="28" r="6" fill="#f43f5e" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="32" cy="55" r="5" fill="#0f172a" stroke="#f43f5e" stroke-width="2"/>
+              <circle cx="68" cy="68" r="6" fill="#f59e0b" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="32" cy="78" r="5" fill="#f43f5e"/>
+            </svg>`
+        },
+        web: {
+          label: 'WEB DEV',
+          chip: '&lt;Code /&gt;',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <rect x="20" y="24" width="60" height="52" rx="8" stroke="#eab308" stroke-width="2.5" fill="rgba(234,179,8,0.1)"/>
+              <line x1="20" y1="36" x2="80" y2="36" stroke="#eab308" stroke-width="1.5"/>
+              <circle cx="28" cy="30" r="2" fill="#ef4444"/>
+              <circle cx="35" cy="30" r="2" fill="#f59e0b"/>
+              <circle cx="42" cy="30" r="2" fill="#10b981"/>
+              <path d="M38 52l-6 6 6 6M62 52l6 6-6 6M53 48l-6 20" stroke="#6FE3D2" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>`
+        },
+        general: {
+          label: 'TECH GUIDE',
+          chip: 'YashTech • Guide',
+          svg: `
+            <svg class="visual-svg" viewBox="0 0 100 100" fill="none">
+              <polygon points="50,18 80,36 80,70 50,88 20,70 20,36" stroke="#6FE3D2" stroke-width="2" fill="rgba(111,227,210,0.08)"/>
+              <polygon points="50,30 70,42 70,64 50,76 30,64 30,42" stroke="#a855f7" stroke-width="1.8"/>
+              <circle cx="50" cy="53" r="5" fill="#38bdf8"/>
+            </svg>`
+        }
+      };
+
+      // Decorates an article element with its unique 3D visual block
+      function decorateArticleCard(card) {
+        if (card.classList.contains('has-3d-visual')) return;
+
+        const topic = detectTopic(card);
+        const config = TOPIC_CONFIG[topic] || TOPIC_CONFIG.general;
+
+        card.classList.add('article-card', 'has-3d-visual', `topic-${topic}`);
+
+        // Create 3D Visual Block
+        const visualBlock = document.createElement('div');
+        visualBlock.className = 'article-3d-visual';
+        visualBlock.innerHTML = `
+          <div class="visual-bg-grid"></div>
+          <div class="visual-glow"></div>
+          <span class="visual-pill">${config.label}</span>
+          <span class="visual-chip">${config.chip}</span>
+          <div class="article-3d-visual-inner">
+            <div class="visual-graphic">
+              ${config.svg}
+            </div>
+          </div>
+        `;
+
+        // Prepend visual block as the top element
+        card.insertBefore(visualBlock, card.firstChild);
+
+        // 3D Parallax Tilt Effect on Mouse Move
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px)`;
+          });
+
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+          });
+        }
+      }
+
+      // Initialize MutationObserver to catch dynamically rendered cards by js/main.js
+      const gridContainer = document.querySelector('[data-blog-grid]');
+      if (gridContainer) {
+        // Decorate any existing cards immediately
+        gridContainer.querySelectorAll('article, .article-card, a').forEach(decorateArticleCard);
+
+        // Watch for cards injected dynamically by js/main.js
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === 1) {
+                if (node.matches('article, .article-card, a')) {
+                  decorateArticleCard(node);
+                } else {
+                  node.querySelectorAll?.('article, .article-card, a').forEach(decorateArticleCard);
+                }
+              }
+            });
+          });
+        });
+
+        observer.observe(gridContainer, { childList: true, subtree: true });
+      }
+
+      // ========================================================
+      // 3. 3D HERO TERMINAL TILT EFFECT
+      // ========================================================
+      const terminal = document.getElementById('hero-terminal');
+      if (terminal && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const parentWrap = terminal.closest('.terminal-wrap');
+
+        parentWrap.addEventListener('mousemove', (e) => {
+          const rect = parentWrap.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = ((y - centerY) / centerY) * -10;
+          const rotateY = ((x - centerX) / centerX) * 10;
+
+          terminal.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        parentWrap.addEventListener('mouseleave', () => {
+          terminal.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+      }
+
+      // ========================================================
+      // 4. SPOTLIGHT GLOW ON FEATURE CARDS
+      // ========================================================
+      document.querySelectorAll('.feature-card').forEach((card) => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        });
+      });
+
+      // ========================================================
+      // 5. SCROLL REVEAL (INTERSECTION OBSERVER)
+      // ========================================================
+      const revealElements = document.querySelectorAll('.reveal-on-scroll');
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
+
+        revealElements.forEach((el) => revealObserver.observe(el));
+      } else {
+        revealElements.forEach((el) => el.classList.add('revealed'));
+      }
+
+      // ========================================================
+      // 6. HIGH-PERFORMANCE PARTICLE CANVAS
+      // ========================================================
+      const canvas = document.getElementById('bg-canvas');
+      if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const ctx = canvas.getContext('2d');
+        let width = (canvas.width = window.innerWidth);
+        let height = (canvas.height = window.innerHeight);
+
+        let particles = [];
+        const particleCount = Math.min(Math.floor(window.innerWidth / 25), 45);
+
+        function resize() {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize, { passive: true });
+
+        class Particle {
+          constructor() {
+            this.reset();
+          }
+          reset() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.35;
+            this.vy = (Math.random() - 0.5) * 0.35;
+            this.radius = Math.random() * 1.5 + 0.8;
+            this.alpha = Math.random() * 0.5 + 0.2;
+          }
+          update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(111, 227, 210, ${this.alpha})`;
+            ctx.fill();
+          }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle());
+        }
+
+        let animationId;
+        function animate() {
+          ctx.clearRect(0, 0, width, height);
+
+          for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+
+            for (let j = i + 1; j < particles.length; j++) {
+              const dx = particles[i].x - particles[j].x;
+              const dy = particles[i].y - particles[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+
+              if (dist < 120) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(111, 227, 210, ${(1 - dist / 120) * 0.12})`;
+                ctx.lineWidth = 0.8;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+              }
+            }
+          }
+          animationId = requestAnimationFrame(animate);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            cancelAnimationFrame(animationId);
+          } else {
+            animate();
+          }
+        });
+
+        animate();
+      }
+    })();
+  </script>
 
 </body>
 
