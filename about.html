@@ -9,7 +9,7 @@
   <title>About Yash — YashTech</title>
 
   <meta name="description"
-    content="Meet Yash, founder of YashTech. Explore his journey, skills, projects, goals and ways to connect.">
+    content="Meet Yash, founder of YashTech. Explore his journey, skills, projects, achievements, certifications and ways to connect.">
 
   <meta name="robots" content="index, follow">
 
@@ -813,6 +813,226 @@
     }
 
     /* =========================================
+       ACHIEVEMENTS & CERTIFICATES
+    ========================================= */
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .certificate-card {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 32px;
+      padding: 32px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s var(--ease-smooth), border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .certificate-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-cyan), #38bdf8, var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .certificate-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(111, 227, 210, 0.12);
+    }
+
+    .certificate-card:hover::before {
+      opacity: 1;
+    }
+
+    .certificate-preview-wrap {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: #0d1527;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s ease;
+    }
+
+    .certificate-card:hover .certificate-preview-wrap {
+      border-color: var(--border-glow);
+    }
+
+    .certificate-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s var(--ease-smooth);
+    }
+
+    .certificate-card:hover .certificate-img {
+      transform: scale(1.03);
+    }
+
+    .certificate-badge-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 5px 12px;
+      background: rgba(11, 17, 32, 0.88);
+      border: 1px solid var(--border-glow);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-cyan);
+      backdrop-filter: blur(8px);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .certificate-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .certificate-meta-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .cert-issuer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .cert-date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .cert-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34d399;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .certificate-title {
+      font-size: clamp(20px, 2.2vw, 26px);
+      margin: 0 0 12px;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      font-family: var(--font-heading);
+      font-weight: 700;
+    }
+
+    .certificate-desc {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.7;
+      margin: 0 0 16px;
+    }
+
+    .certificate-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .skill-pill {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--accent-cyan);
+      background: rgba(111, 227, 210, 0.06);
+      border: 1px solid rgba(111, 227, 210, 0.18);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .certificate-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: auto;
+      padding-top: 10px;
+    }
+
+    .btn-cert-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 22px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, #38bdf8 100%);
+      color: #050b14;
+      font-weight: 700;
+      font-size: 13.5px;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(111, 227, 210, 0.25);
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .btn-cert-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(111, 227, 210, 0.4);
+      color: #040810;
+    }
+
+    .cert-id-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* =========================================
        CONNECT & SOCIAL CARDS
     ========================================= */
     .social-grid {
@@ -978,6 +1198,12 @@
         margin-bottom: 20px;
       }
 
+      .certificate-card {
+        grid-template-columns: 1fr;
+        gap: 22px;
+        padding: 24px;
+      }
+
       .skill-grid {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -1012,8 +1238,9 @@
 
       .about-card,
       .journey-card,
-      .founder-note {
-        padding: 24px;
+      .founder-note,
+      .certificate-card {
+        padding: 20px;
       }
 
       .photo-badge {
@@ -1026,12 +1253,15 @@
         top: 10px;
       }
 
-      .hero-actions {
+      .hero-actions,
+      .certificate-actions {
         flex-direction: column;
+        align-items: stretch;
       }
 
       .btn-hero-primary,
-      .btn-hero-secondary {
+      .btn-hero-secondary,
+      .btn-cert-primary {
         width: 100%;
         justify-content: center;
       }
@@ -1669,7 +1899,7 @@
 
 
 
-  <!-- ACHIEVEMENTS -->
+  <!-- ACHIEVEMENTS & CERTIFICATIONS -->
 
   <section class="founder-section reveal-on-scroll">
 
@@ -1681,25 +1911,98 @@
           05 / achievements
         </span>
 
-        <h2>Achievements</h2>
+        <h2>Achievements &amp; Certifications</h2>
 
         <p>
-          This section will grow over time. Only achievements I actually
-          accomplish will be added here.
+          Verified credentials, industry certifications, and milestones I have earned
+          along my learning and development journey.
         </p>
 
       </div>
 
 
-      <div class="about-card">
+      <div class="achievement-grid">
 
-        <p>
-          🚀 No achievements added yet.
-        </p>
+        <article class="certificate-card">
 
-        <p>
-          This section will be updated as I accomplish new milestones.
-        </p>
+          <div class="certificate-preview-wrap">
+
+            <img
+              src="https://pdf.ms.credential.net/v2/certificate/image?env=production&credential=brzcso3r&variant=medium"
+              alt="AI-Powered Performance Ads Certification — Skillshop (Google)"
+              class="certificate-img"
+              loading="lazy">
+
+            <div class="certificate-badge-overlay">
+              <span class="status-dot"></span>
+              <span>Verified Credential</span>
+            </div>
+
+          </div>
+
+
+          <div class="certificate-content">
+
+            <div>
+
+              <div class="certificate-meta-top">
+
+                <span class="cert-issuer-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  Skillshop (Google)
+                </span>
+
+                <span class="cert-date-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Issued: Mar 2026 • Valid to: Mar 2027
+                </span>
+
+                <span class="cert-status-badge">
+                  ✓ Active
+                </span>
+
+              </div>
+
+              <h3 class="certificate-title">
+                AI-Powered Performance Ads Certification
+              </h3>
+
+              <p class="certificate-desc">
+                Recognizes proficiency in Google’s cross-channel AI solutions, AI automation strategy formulation, agile budget allocation, and utilizing Google Ads reporting &amp; insights for optimized business outcomes.
+              </p>
+
+              <div class="certificate-skills">
+                <span class="skill-pill">AI Automation Strategy</span>
+                <span class="skill-pill">Google Ads</span>
+                <span class="skill-pill">Cross-Channel AI</span>
+                <span class="skill-pill">Performance Optimization</span>
+                <span class="skill-pill">Reporting &amp; Insights</span>
+              </div>
+
+            </div>
+
+
+            <div class="certificate-actions">
+
+              <a
+                class="btn-cert-primary"
+                href="https://www.credential.net/7886165e-8bdd-4d3e-9e6e-7889a5934e0f"
+                target="_blank"
+                rel="noopener noreferrer">
+                <span>View Certificate</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+              </a>
+
+              <span class="cert-id-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                ID: 7886165e
+              </span>
+
+            </div>
+
+          </div>
+
+        </article>
 
       </div>
 
